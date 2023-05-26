@@ -1,6 +1,7 @@
 package com.c23ps323.bitesense.ui.camera
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +19,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.FragmentCameraBinding
+import com.c23ps323.bitesense.ui.preview.PreviewFragment
 import com.c23ps323.bitesense.utils.createFile
 
 class CameraFragment : Fragment() {
@@ -72,10 +75,17 @@ class CameraFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
-//            val selectedImg = result.data?.data as Uri
-//            TODO: SET KE PREVIEW PAGE
-//            val intent = Intent(this, DetailActivity::class.java)
-//            startActivity(intent)
+            val selectedImg = result.data?.data as Uri
+            val bundle = Bundle()
+            val previewFragment = PreviewFragment()
+
+            bundle.putParcelable(PreviewFragment.EXTRA_URI, selectedImg)
+            previewFragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_camera, previewFragment, PreviewFragment::class.java.simpleName)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -96,7 +106,16 @@ class CameraFragment : Fragment() {
                         cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
                     )
                     activity!!.setResult(200, intent)
-                    activity!!.finish()
+
+                    val bundle = Bundle()
+                    val previewFragment = PreviewFragment()
+                    bundle.putSerializable(PreviewFragment.EXTRA_PICTURE, photoFile)
+                    previewFragment.arguments = bundle
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.frame_camera, previewFragment, PreviewFragment::class.java.simpleName)
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 override fun onError(exception: ImageCaptureException) {

@@ -26,4 +26,7 @@
     <string name="switch_camera">Switch Camera</string>
     <string name="pick_from_gallery">Pick From Gallery</string>
     <string name="flash">Flash</string>
+    <string name="close">Close</string>
+    <string name="analyze">Analyze</string>
+    <string name="preview_image">Preview Image</string>
 </resources>
