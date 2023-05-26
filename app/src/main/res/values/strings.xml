@@ -24,4 +24,6 @@
     <string name="sample_composition">Air berkarbonasi, gula, pewarna karamel (kelas IV), konsentrat kola, pengatur keasaman (asam fosfat), kafein. Mengandung kafein 34mg/saji. maksimum konsumsi 150mg/hari.</string>
     <string name="capture_image">Capture Image</string>
     <string name="switch_camera">Switch Camera</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="flash">Flash</string>
 </resources>
