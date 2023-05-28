@@ -1,5 +1,6 @@
 package com.c23ps323.bitesense.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,9 @@ import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.databinding.FragmentHomeBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
+import com.c23ps323.bitesense.ui.detail.DetailActivity
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var list: ArrayList<Product> = arrayListOf()
@@ -38,8 +40,8 @@ class HomeFragment : Fragment() {
             ).show()
         }
 
+        binding.rvLastScannedItems.adapter = ProductAdapter(this, list)
         binding.apply {
-            rvLastScannedItems.adapter = ProductAdapter(list)
             rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
             rvLastScannedItems.setHasFixedSize(true)
         }
@@ -48,5 +50,10 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onItemClick(id: String) {
+        val intent = Intent(requireContext(), DetailActivity::class.java)
+        startActivity(intent)
     }
 }

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/iv_product"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="139dp"
+            android:layout_height="139dp"
             android:contentDescription="@string/product_image"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,9 +42,9 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:textColor="@color/mainTextColor"
-                android:textStyle="bold"
+                android:textSize="22sp"
+                app:fontWeight="600"
                 tools:text="Coca Cola" />
 
             <TextView
@@ -52,22 +52,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mainTextColor"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 tools:text="Coke" />
 
-            <ImageView
-                android:id="@+id/iv_indicator"
-                android:layout_width="40dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="4dp"
-                android:contentDescription="@string/warning"
-                android:src="@drawable/warning_indicator" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/warning_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:chipBackgroundColor="@color/dangerColor"
+                app:chipEndPadding="2dp"
+                app:chipMinHeight="22dp"
+                app:chipStartPadding="2dp"
+                app:fontWeight="600"
+                tools:text="Danger" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_favorite"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/favorite"
             app:layout_constraintBottom_toBottomOf="parent"
