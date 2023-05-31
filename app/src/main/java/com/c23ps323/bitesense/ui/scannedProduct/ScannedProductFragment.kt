@@ -36,7 +36,7 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
         list.addAll(ProductData.favoriteListData)
 
-        binding.rvScannedProducts.adapter = ProductAdapter(this, list)
+//        binding.rvScannedProducts.adapter = ProductAdapter(this, list)
         binding.apply {
             rvScannedProducts.layoutManager = LinearLayoutManager(requireContext())
             rvScannedProducts.setHasFixedSize(true)

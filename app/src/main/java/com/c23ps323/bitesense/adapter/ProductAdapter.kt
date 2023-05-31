@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
+import com.c23ps323.bitesense.data.response.DataItem
 import com.c23ps323.bitesense.databinding.ProductItemCardBinding
 import com.c23ps323.bitesense.entities.Product
 
-class ProductAdapter(private val listener: OnItemClickListener, private val listProduct: List<Product>) :
-    ListAdapter<Product, ProductAdapter.ViewHolder>(
+class ProductAdapter(private val listener: OnItemClickListener, private val listProduct: List<DataItem>) :
+    ListAdapter<DataItem, ProductAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
     interface OnItemClickListener {
@@ -21,25 +22,26 @@ class ProductAdapter(private val listener: OnItemClickListener, private val list
 
     class ViewHolder(private val binding: ProductItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindProduct(product: Product) {
+        fun bindProduct(product: DataItem) {
+            var isFavorite: Boolean = product.favorite == 1
             Glide.with(itemView)
-                .load(product.photoUrl)
+                .load(product.fotoProduk)
                 .into(binding.ivProduct)
             binding.apply {
-                tvName.text = product.name
-                tvCategory.text = product.category
-                if (product.isFavorite) ivFavorite.setImageResource(R.drawable.round_favorite_24) else ivFavorite.setImageResource(
+                tvName.text = product.namaProduk
+                tvCategory.text = product.tagProduk.toString()
+                if (product.favorite == 1) ivFavorite.setImageResource(R.drawable.round_favorite_24) else ivFavorite.setImageResource(
                     R.drawable.round_favorite_border_24
                 )
                 ivFavorite.setOnClickListener {
-                    product.isFavorite = !product.isFavorite
-                    if (product.isFavorite) {
+                    isFavorite = !isFavorite
+                    if (isFavorite) {
                         binding.ivFavorite.setImageResource(R.drawable.round_favorite_24)
                     } else {
                         binding.ivFavorite.setImageResource(R.drawable.round_favorite_border_24)
                     }
                 }
-                when(product.warningIndicator) {
+                when(product.alert) {
                     0 -> binding.warningIndicator.apply {
                         setText(R.string.danger)
                         chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.dangerColor)
@@ -77,18 +79,18 @@ class ProductAdapter(private val listener: OnItemClickListener, private val list
         holder.bindProduct(listProduct[position])
 
         holder.itemView.setOnClickListener {
-            listener.onItemClick(listProduct[position].id)
+            listener.onItemClick(listProduct[position].idProduk.toString())
         }
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Product>() {
-            override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataItem>() {
+            override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-                return oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+                return oldItem.idProduk == newItem.idProduk
             }
         }
     }
