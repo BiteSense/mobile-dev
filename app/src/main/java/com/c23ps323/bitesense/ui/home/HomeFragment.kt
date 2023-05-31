@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.response.DataItem
+import com.c23ps323.bitesense.data.response.ProductResponse
 import com.c23ps323.bitesense.databinding.FragmentHomeBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
@@ -35,7 +36,6 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
         return binding.root
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,13 +55,7 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
-                        binding.rvLastScannedItems.adapter = ProductAdapter(this,
-                            result.data.data as List<DataItem>
-                        )
-                        binding.apply {
-                            rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
-                            rvLastScannedItems.setHasFixedSize(true)
-                        }
+                        setupRecyclerView(result.data)
                     }
                     is Result.Error -> {
                         showLoading(false)
@@ -97,6 +91,17 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 progressBar.visibility = View.GONE
                 linearLayout.visibility = View.VISIBLE
             }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun setupRecyclerView(product: ProductResponse) {
+        binding.rvLastScannedItems.adapter = ProductAdapter(this,
+            product.data as List<DataItem>
+        )
+        binding.apply {
+            rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
+            rvLastScannedItems.setHasFixedSize(true)
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.response.DataItem
+import com.c23ps323.bitesense.data.response.ProductResponse
 import com.c23ps323.bitesense.databinding.FragmentHistoryBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
@@ -34,7 +35,6 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
         return binding.root
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,15 +43,13 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
         historyViewModel.getHistoryProducts.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when(result) {
-                    is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is Result.Loading -> showLoading(true)
                     is Result.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.rvHistoryItems.adapter = ProductAdapter(this,
-                            result.data.data as List<DataItem>
-                        )
+                        showLoading(false)
+                        setupRecyclerView(result.data)
                     }
                     is Result.Error -> {
-                        binding.progressBar.visibility = View.GONE
+                        showLoading(false)
                         Toast.makeText(
                             requireContext(),
                             result.error,
@@ -61,15 +59,35 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 }
             }
         }
-
-        binding.apply {
-            rvHistoryItems.layoutManager = LinearLayoutManager(requireContext())
-            rvHistoryItems.setHasFixedSize(true)
-        }
     }
 
     override fun onItemClick(id: String) {
         val intent = Intent(requireContext(), DetailActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showLoading(show: Boolean) {
+        if (show) {
+            binding.apply {
+                progressBar.visibility = View.VISIBLE
+                linearLayout.visibility = View.GONE
+            }
+        } else {
+            binding.apply {
+                progressBar.visibility = View.GONE
+                linearLayout.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun setupRecyclerView(product: ProductResponse) {
+        binding.rvHistoryItems.adapter = ProductAdapter(this,
+            product.data as List<DataItem>
+        )
+        binding.apply {
+            rvHistoryItems.layoutManager = LinearLayoutManager(requireContext())
+            rvHistoryItems.setHasFixedSize(true)
+        }
     }
 }
