@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.FragmentPreviewBinding
+import com.c23ps323.bitesense.ui.scannedProduct.ScannedProductFragment
 import java.io.File
 
 class PreviewFragment : Fragment() {
@@ -50,6 +52,13 @@ class PreviewFragment : Fragment() {
 
         binding.btnClose.setOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        binding.btnAnalyze.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_camera, ScannedProductFragment(), ScannedProductFragment::class.java.simpleName)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
