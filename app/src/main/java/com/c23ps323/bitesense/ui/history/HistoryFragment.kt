@@ -11,8 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
-import com.c23ps323.bitesense.data.response.DataItem
-import com.c23ps323.bitesense.data.response.ProductResponse
+import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentHistoryBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
@@ -42,12 +41,13 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
         historyViewModel.getHistoryProducts.observe(viewLifecycleOwner) { result ->
             if (result != null) {
-                when(result) {
+                when (result) {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
                         setupRecyclerView(result.data)
                     }
+
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
@@ -80,11 +80,17 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun setupRecyclerView(product: ProductResponse) {
-        binding.rvHistoryItems.adapter = ProductAdapter(this,
-            product.data as List<DataItem>
-        )
+    private fun setupRecyclerView(products: List<ProductEntity>) {
+        val productAdapter = ProductAdapter(this) { product ->
+            if (product.isFavorite) {
+                historyViewModel.saveProduct(product)
+            } else {
+                historyViewModel.deleteProduct(product)
+            }
+
+        }
+        binding.rvHistoryItems.adapter = productAdapter
+        productAdapter.submitList(products)
         binding.apply {
             rvHistoryItems.layoutManager = LinearLayoutManager(requireContext())
             rvHistoryItems.setHasFixedSize(true)

@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
-import com.c23ps323.bitesense.data.response.DataItem
-import com.c23ps323.bitesense.data.response.ProductResponse
+import com.c23ps323.bitesense.data.remote.response.DataItem
+import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.databinding.FragmentScannedProductBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
@@ -47,25 +47,25 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
         list.addAll(ProductData.favoriteListData)
 
-        scannedProductViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when(result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        setupRecyclerView(result.data)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
+//        scannedProductViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
+//            if (result != null) {
+//                when(result) {
+//                    is Result.Loading -> showLoading(true)
+//                    is Result.Success -> {
+//                        showLoading(false)
+//                        setupRecyclerView(result.data)
+//                    }
+//                    is Result.Error -> {
+//                        showLoading(false)
+//                        Toast.makeText(
+//                            requireContext(),
+//                            result.error,
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun showSystemUI() {
@@ -104,14 +104,14 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun setupRecyclerView(product: ProductResponse) {
-        binding.rvScannedProducts.adapter = ProductAdapter(this,
-            product.data as List<DataItem>
-        )
-        binding.apply {
-            rvScannedProducts.layoutManager = LinearLayoutManager(requireContext())
-            rvScannedProducts.setHasFixedSize(true)
-        }
-    }
+//    @Suppress("UNCHECKED_CAST")
+//    private fun setupRecyclerView(product: ProductResponse) {
+//        binding.rvScannedProducts.adapter = ProductAdapter(this,
+//            product.data as List<DataItem>
+//        )
+//        binding.apply {
+//            rvScannedProducts.layoutManager = LinearLayoutManager(requireContext())
+//            rvScannedProducts.setHasFixedSize(true)
+//        }
+//    }
 }

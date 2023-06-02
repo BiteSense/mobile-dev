@@ -1,19 +1,19 @@
-package com.c23ps323.bitesense.data.response
+package com.c23ps323.bitesense.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
 data class ProductResponse(
 
-	@field:SerializedName("data")
+    @field:SerializedName("data")
 	val data: List<DataItem?>? = null,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String? = null,
 
-	@field:SerializedName("statusCode")
+    @field:SerializedName("statusCode")
 	val statusCode: Int? = null,
 
-	@field:SerializedName("status")
+    @field:SerializedName("status")
 	val status: String? = null
 )
 

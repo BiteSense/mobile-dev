@@ -1,4 +1,4 @@
-package com.c23ps323.bitesense.data.retrofit
+package com.c23ps323.bitesense.data.remote.retrofit
 
 import android.content.Context
 import de.hdodenhof.circleimageview.BuildConfig
@@ -16,7 +16,7 @@ class ApiConfig {
                 val requestHeader = req.newBuilder()
                     .addHeader(
                         "Cookie",
-                        "id_user=132362637; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzMjM2MjYzNywiaWF0IjoxNjg1NTE2OTU5LCJleHAiOjE2ODU2MDMzNTl9.GY5S0o_hBtauUP2TA56MJWZY9sNMQ_4CnSj6N_AQgIE"
+                        "id_user=132362637; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzMjM2MjYzNywiaWF0IjoxNjg1Njg4Njg0LCJleHAiOjE2ODU3NzUwODR9.VCdkOWgEeygau0axq0_TUE4PbE7VXSlmbXDTbiBnb9o"
                     )
                     .build()
                 chain.proceed(requestHeader)
@@ -33,7 +33,7 @@ class ApiConfig {
                 .addInterceptor(interceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://abaa-2001-448a-7022-27c5-14-123f-61a-d0bd.ngrok-free.app/api/")
+                .baseUrl("https://4a43-2001-448a-702f-45c7-e1d8-da02-ad28-662a.ngrok-free.app/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

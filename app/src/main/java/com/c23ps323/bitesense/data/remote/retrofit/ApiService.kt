@@ -1,6 +1,6 @@
-package com.c23ps323.bitesense.data.retrofit
+package com.c23ps323.bitesense.data.remote.retrofit
 
-import com.c23ps323.bitesense.data.response.ProductResponse
+import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import retrofit2.http.GET
 
 interface ApiService {

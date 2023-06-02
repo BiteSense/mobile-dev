@@ -2,7 +2,6 @@ package com.c23ps323.bitesense.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
-import com.c23ps323.bitesense.data.response.DataItem
-import com.c23ps323.bitesense.data.response.ProductResponse
+import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentHomeBinding
 import com.c23ps323.bitesense.entities.Product
 import com.c23ps323.bitesense.entities.ProductData
@@ -94,11 +92,16 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun setupRecyclerView(product: ProductResponse) {
-        binding.rvLastScannedItems.adapter = ProductAdapter(this,
-            product.data as List<DataItem>
-        )
+    private fun setupRecyclerView(products: List<ProductEntity>) {
+        val productAdapter = ProductAdapter(this) { product ->
+            if (product.isFavorite) {
+                homeViewModel.saveProduct(product)
+            } else {
+                homeViewModel.deleteProduct(product)
+            }
+        }
+        binding.rvLastScannedItems.adapter = productAdapter
+        productAdapter.submitList(products)
         binding.apply {
             rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
             rvLastScannedItems.setHasFixedSize(true)
