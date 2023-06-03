@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
@@ -45,6 +47,29 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 "Under Development",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+
+        homeViewModel.user.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        Glide.with(requireContext())
+                            .load(result.data.data?.result?.fotoUser)
+                            .into(binding.ivProfile)
+                        binding.tvName.text = getString(R.string.greet_user, result.data.data?.result?.username)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
         homeViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->

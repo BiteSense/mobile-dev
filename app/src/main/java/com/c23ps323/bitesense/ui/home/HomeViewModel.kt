@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.c23ps323.bitesense.data.Repository
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
+import com.c23ps323.bitesense.utils.UserPreference
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: Repository) : ViewModel() {
@@ -20,4 +21,6 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
             repository.setFavoriteProduct(product, false)
         }
     }
+
+    val user = repository.getUserProfile()
 }

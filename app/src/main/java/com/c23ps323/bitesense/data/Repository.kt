@@ -6,12 +6,23 @@ import androidx.lifecycle.map
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
+import com.c23ps323.bitesense.data.remote.response.UserResponse
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
 
 class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao
 ) {
+
+    fun getUserProfile(): LiveData<Result<UserResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getUserProfile()
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
 
     fun getAllProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)

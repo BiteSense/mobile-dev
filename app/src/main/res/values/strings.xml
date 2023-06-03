@@ -30,4 +30,5 @@
     <string name="analyze">Analyze</string>
     <string name="preview_image">Preview Image</string>
     <string name="scanned_products">Scanned Products</string>
+    <string name="greet_user">Hello, %s</string>
 </resources>
