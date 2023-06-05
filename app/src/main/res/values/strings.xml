@@ -14,6 +14,7 @@
     <string name="warning">Warning</string>
     <string name="favorite_products">Favorite Products</string>
     <string name="scanned_items_history">Scanned Items History</string>
+
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="register">Register</string>
@@ -47,4 +48,21 @@
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="generete_qr">Generete QR</string>
     <string name="generate_qr">Generate QR</string>
+
+    <string name="danger">Danger</string>
+    <string name="safe">Safe</string>
+    <string name="logout">Logout</string>
+    <string name="product_detail">Product Detail</string>
+    <string name="description">Description</string>
+    <string name="composition">Composition</string>
+    <string name="sample_description">Coca-Cola, atau Coke, adalah minuman ringan berkarbonasi yang diproduksi oleh Coca-Cola Company. Pada tahun 2013, produk Coke dijual di lebih dari 200 negara di seluruh dunia, dengan konsumen meminum lebih dari 1,8 miliar porsi minuman perusahaan per hari.</string>
+    <string name="sample_composition">Air berkarbonasi, gula, pewarna karamel (kelas IV), konsentrat kola, pengatur keasaman (asam fosfat), kafein. Mengandung kafein 34mg/saji. maksimum konsumsi 150mg/hari.</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="switch_camera">Switch Camera</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="flash">Flash</string>
+    <string name="close">Close</string>
+    <string name="analyze">Analyze</string>
+    <string name="preview_image">Preview Image</string>
+
 </resources>
