@@ -14,7 +14,6 @@
     <string name="warning">Warning</string>
     <string name="favorite_products">Favorite Products</string>
     <string name="scanned_items_history">Scanned Items History</string>
-
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="register">Register</string>
@@ -48,7 +47,6 @@
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="generete_qr">Generete QR</string>
     <string name="generate_qr">Generate QR</string>
-
     <string name="danger">Danger</string>
     <string name="safe">Safe</string>
     <string name="logout">Logout</string>
@@ -64,5 +62,7 @@
     <string name="close">Close</string>
     <string name="analyze">Analyze</string>
     <string name="preview_image">Preview Image</string>
-
+    <string name="scanned_products">Scanned Products</string>
+    <string name="greet_user">Hello, %s</string>
+    <string name="change_title">Change %s</string>
 </resources>

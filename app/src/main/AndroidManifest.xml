@@ -6,12 +6,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -40,22 +34,25 @@
         android:theme="@style/Theme.BiteSense"
         tools:targetApi="31">
         <activity
-
+            android:name=".MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".ui.generateqr.InputGenerateQRActivity"
             android:exported="false" >
         </activity>
         <activity
             android:name=".ui.scanqr.ScannerQRActivity"
             android:exported="false">
-
         </activity>
         <activity
             android:name=".ui.preference.PreferenceActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.AuthActivity"
-            android:exported="true">
-
+            android:exported="true"/>
+        <activity
             android:name=".ui.camera.CameraActivity"
             android:exported="false" />
         <activity
@@ -64,24 +61,14 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -92,7 +79,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
