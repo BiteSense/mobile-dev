@@ -31,4 +31,7 @@
     <string name="preview_image">Preview Image</string>
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
+    <string name="submit">Submit</string>
+    <string name="username">Username</string>
+    <string name="change_title">Change %s</string>
 </resources>

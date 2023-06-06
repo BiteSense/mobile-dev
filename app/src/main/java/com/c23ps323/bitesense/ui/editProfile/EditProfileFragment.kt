@@ -5,56 +5,74 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import com.c23ps323.bitesense.R
+import com.c23ps323.bitesense.databinding.FragmentEditProfileBinding
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentEditProfileBinding? = null
+    private val binding get() = _binding!!
+    private var title: String? = null
+    private var profileValue: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false)
+    ): View {
+        _binding = FragmentEditProfileBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        hideBottomNav(true)
+        title = arguments?.getString(EXTRA_TITLE)
+        profileValue = arguments?.getString(EXTRA_VALUE)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        onBackPressed()
+        binding.etProfile.setText(profileValue)
+        binding.tvTitle.text = getString(R.string.change_title, title)
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+            hideBottomNav(false)
+        }
+    }
+
+    private fun onBackPressed() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                    hideBottomNav(false)
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            callback
+        )
+    }
+
+    private fun hideBottomNav(isShow: Boolean) {
+        val bottomAppBar = activity?.findViewById<BottomAppBar>(R.id.bottom_appbar)
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        if (isShow) {
+            bottomAppBar?.visibility = View.GONE
+            fab?.visibility = View.GONE
+        } else {
+            bottomAppBar?.visibility = View.VISIBLE
+            fab?.visibility = View.VISIBLE
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        const val EXTRA_TITLE = "extra_title"
+        const val EXTRA_VALUE = "extra_value"
     }
 }

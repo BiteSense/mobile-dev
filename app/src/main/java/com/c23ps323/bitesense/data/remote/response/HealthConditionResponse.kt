@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class HealthConditionResponse(
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: DataKondisi? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,
@@ -17,7 +17,7 @@ data class HealthConditionResponse(
 	val status: String? = null
 )
 
-data class Data(
+data class DataKondisi(
 
 	@field:SerializedName("dataKondisi")
 	val dataKondisi: List<DataKondisiItem?>? = null,

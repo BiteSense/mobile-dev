@@ -1,10 +1,14 @@
 package com.c23ps323.bitesense.data.remote.retrofit
 
+import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
 import retrofit2.http.GET
 
 interface ApiService {
+    @GET("users/preference")
+    suspend fun getUserHealthCondition(): HealthConditionResponse
+
     @GET("users/profile")
     suspend fun getUserProfile(): UserResponse
 

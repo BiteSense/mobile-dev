@@ -1,18 +1,21 @@
 package com.c23ps323.bitesense.ui.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
+import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
 import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentProfileBinding? = null
@@ -22,6 +25,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         ViewModelFactory(requireContext())
     }
     private lateinit var userPreference: UserPreference
+    private val userHealthConditions = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,13 +56,59 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                             tvPhone.text = result.data.data?.result?.noTelepon.toString()
                         }
                     }
+
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
                             requireContext(),
                             result.error,
                             Toast.LENGTH_SHORT
-                        ).show()                    }
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        profileViewModel.getUserHealthCondition.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        val dataPenyakit = result.data.data?.dataPenyakit
+                        val dataKondisi = result.data.data?.dataKondisi
+                        val dataFood = result.data.data?.dataFood
+                        lifecycleScope.launch {
+                            if (dataFood!!.isNotEmpty()) {
+                                for (i in 0 until result.data.data.dataFood.size) {
+                                    userHealthConditions.add(result.data.data.dataFood[i]?.nameFood!!)
+                                }
+                            }
+                            if (dataPenyakit!!.isNotEmpty()) {
+                                for (i in 0 until result.data.data.dataPenyakit.size) {
+                                    userHealthConditions.add(result.data.data.dataPenyakit[i]?.namaPenyakit!!)
+                                }
+                            }
+                            if (dataKondisi!!.isNotEmpty()) {
+                                for (i in 0 until result.data.data.dataKondisi!!.size) {
+                                    userHealthConditions.add(result.data.data.dataKondisi[i]?.nameCondition!!)
+                                }
+                            }
+                        }
+                        val text = userHealthConditions.joinToString {
+                            it
+                        }
+                        binding.tvHealth.text = text
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -91,29 +141,25 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        userHealthConditions.clear()
+    }
+
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when (v?.id) {
             R.id.row_name -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Under Development",
-                    Toast.LENGTH_SHORT
-                ).show()
+                navigateToEdit("Username", "Chrisnico")
             }
+
             R.id.row_email -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Under Development",
-                    Toast.LENGTH_SHORT
-                ).show()
+                navigateToEdit("Email", "tes@example.com")
             }
+
             R.id.row_phone -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Under Development",
-                    Toast.LENGTH_SHORT
-                ).show()
+                navigateToEdit("Phone Number", "12334234")
             }
+
             R.id.row_health -> {
                 Toast.makeText(
                     requireContext(),
@@ -121,6 +167,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             R.id.btn_logout -> {
                 userPreference.removeUserCookie()
                 Toast.makeText(
@@ -130,5 +177,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                 ).show()
             }
         }
+    }
+
+    private fun navigateToEdit(title: String, value: String) {
+        val editProfileFragment = EditProfileFragment()
+        val bundle = Bundle()
+        bundle.putString(EditProfileFragment.EXTRA_TITLE, title)
+        bundle.putString(EditProfileFragment.EXTRA_VALUE, value)
+        editProfileFragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .replace(
+                R.id.frame_container,
+                editProfileFragment,
+                EditProfileFragment::class.java.simpleName
+            )
+            .addToBackStack(null)
+            .commit()
     }
 }
