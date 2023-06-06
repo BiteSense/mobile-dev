@@ -90,7 +90,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                                 }
                             }
                             if (dataKondisi!!.isNotEmpty()) {
-                                for (i in 0 until result.data.data.dataKondisi!!.size) {
+                                for (i in 0 until result.data.data.dataKondisi.size) {
                                     userHealthConditions.add(result.data.data.dataKondisi[i]?.nameCondition!!)
                                 }
                             }

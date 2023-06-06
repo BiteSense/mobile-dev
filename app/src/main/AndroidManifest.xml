@@ -39,6 +39,20 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
+            android:name=".ui.generateqr.InputGenerateQRActivity"
+            android:exported="false" >
+        </activity>
+        <activity
+            android:name=".ui.scanqr.ScannerQRActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".ui.preference.PreferenceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="true"/>
+        <activity
             android:name=".ui.camera.CameraActivity"
             android:exported="false" />
         <activity
