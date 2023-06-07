@@ -12,6 +12,7 @@ import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.FragmentLoginBinding
 import com.c23ps323.bitesense.ui.preference.PreferenceActivity
+import com.c23ps323.bitesense.utils.UserPreference
 
 
 class LoginFragment : Fragment() {
@@ -38,10 +39,11 @@ class LoginFragment : Fragment() {
             )
 
             btnLogin.setOnClickListener {
+                val userPreference = UserPreference(requireContext())
+                userPreference.saveUserCookie("id_user=132362637; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzMjM2MjYzNywiaWF0IjoxNjg2MTA4NzA1LCJleHAiOjE2ODYxOTUxMDV9.JrRJprQWAH08UnKpBDHW0wmdYFYKfRW9HC3jUfWZ1Wo")
                 Intent(requireContext(),PreferenceActivity::class.java).also {
                     startActivity(it)
                 }
-
             }
 
         }

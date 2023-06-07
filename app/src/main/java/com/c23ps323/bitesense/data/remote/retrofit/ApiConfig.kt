@@ -14,7 +14,6 @@ class ApiConfig {
         fun getApiService(context: Context): ApiService {
             val userPreference = UserPreference(context)
             val interceptor = Interceptor { chain ->
-                userPreference.saveUserCookie("id_user=132362637; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzMjM2MjYzNywiaWF0IjoxNjg1ODc3OTk0LCJleHAiOjE2ODU5NjQzOTR9.uGjMgSDUZYkUh4TwMhD6A1RQXnd1DTTj-TH7UXzmXac")
                 val cookie = userPreference.getUserCookie()
                 val req = chain.request()
                 val requestHeader = req.newBuilder()
@@ -37,7 +36,7 @@ class ApiConfig {
                 .addInterceptor(interceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://6644-2001-448a-7020-b537-d91d-1c80-4cce-9085.ngrok-free.app/api/")
+                .baseUrl("http://192.168.1.5:3000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

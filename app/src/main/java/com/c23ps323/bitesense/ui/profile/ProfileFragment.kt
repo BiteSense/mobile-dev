@@ -1,5 +1,6 @@
 package com.c23ps323.bitesense.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,14 @@ import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
+import com.c23ps323.bitesense.ui.auth.AuthActivity
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
+import com.c23ps323.bitesense.ui.preference.PreferenceActivity
 import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment(), View.OnClickListener {
+class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -39,7 +42,17 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         userPreference = UserPreference(requireContext())
-        setupButton()
+
+        binding.btnLogout.setOnClickListener {
+            userPreference.removeUserCookie()
+            Toast.makeText(
+                requireContext(),
+                "Logout Success",
+                Toast.LENGTH_SHORT
+            ).show()
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            requireActivity().finish()
+        }
 
         profileViewModel.getUserProfile.observe(viewLifecycleOwner) { result ->
             if (result != null) {
@@ -54,6 +67,15 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                             tvName.text = result.data.data?.result?.username
                             tvEmail.text = result.data.data?.result?.email
                             tvPhone.text = result.data.data?.result?.noTelepon.toString()
+                            rowName.setOnClickListener {
+                                navigateToEdit("Username", result.data.data?.result?.username.toString())
+                            }
+                            rowPhone.setOnClickListener {
+                                navigateToEdit("Phone Number", result.data.data?.result?.noTelepon.toString())
+                            }
+                            rowEmail.setOnClickListener {
+                                navigateToEdit("Email", result.data.data?.result?.email.toString())
+                            }
                         }
                     }
 
@@ -99,6 +121,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                             it
                         }
                         binding.tvHealth.text = text
+                        binding.rowHealth.setOnClickListener {
+                            startActivity(Intent(requireContext(), PreferenceActivity::class.java))
+                        }
                     }
 
                     is Result.Error -> {
@@ -112,14 +137,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    private fun setupButton() {
-        binding.rowName.setOnClickListener(this)
-        binding.rowEmail.setOnClickListener(this)
-        binding.rowPhone.setOnClickListener(this)
-        binding.rowHealth.setOnClickListener(this)
-        binding.btnLogout.setOnClickListener(this)
     }
 
     override fun onDestroy() {
@@ -144,39 +161,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     override fun onPause() {
         super.onPause()
         userHealthConditions.clear()
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.row_name -> {
-                navigateToEdit("Username", "Chrisnico")
-            }
-
-            R.id.row_email -> {
-                navigateToEdit("Email", "tes@example.com")
-            }
-
-            R.id.row_phone -> {
-                navigateToEdit("Phone Number", "12334234")
-            }
-
-            R.id.row_health -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Under Development",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            R.id.btn_logout -> {
-                userPreference.removeUserCookie()
-                Toast.makeText(
-                    requireContext(),
-                    "Logout Success",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     private fun navigateToEdit(title: String, value: String) {
