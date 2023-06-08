@@ -6,6 +6,7 @@ data class Product(
     var photoUrl: String = "",
     var category: String = "",
     var description: String = "",
+    var composition: String = "",
     var warningIndicator: Int = 0,
     var isFavorite: Boolean = false,
 )

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_container, HomeFragment(), HomeFragment::class.java.simpleName)
+                .add(R.id.frame_container, HomeFragment(), HomeFragment::class.java.simpleName)
                 .commit()
         }
 

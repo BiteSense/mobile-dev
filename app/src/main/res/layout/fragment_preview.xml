@@ -20,22 +20,24 @@
     <ImageView
         android:id="@+id/iv_preview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginVertical="16dp"
         android:contentDescription="@string/preview_image"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/btn_analyze"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_close" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_analyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:text="@string/analyze"
-        app:backgroundTint="@color/primaryColor"
         android:textColor="@color/mainTextColor"
         android:textStyle="bold"
+        app:backgroundTint="@color/primaryColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
