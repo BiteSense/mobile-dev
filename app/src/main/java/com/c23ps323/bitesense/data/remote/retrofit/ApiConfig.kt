@@ -19,7 +19,7 @@ class ApiConfig {
                 val requestHeader = req.newBuilder()
                     .addHeader(
                         "Cookie",
-                        cookie
+                        cookie,
                     )
                     .build()
                 chain.proceed(requestHeader)
