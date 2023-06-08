@@ -7,13 +7,27 @@ import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
+import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
+import okhttp3.MultipartBody
 
 class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao
 ) {
+    fun uploadProduct(
+        productImage: MultipartBody.Part
+    ): LiveData<Result<UploadProductResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.uploadProduct(productImage)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getUserHealthCondition(): LiveData<Result<HealthConditionResponse>> = liveData {
         emit(Result.Loading)
         try {

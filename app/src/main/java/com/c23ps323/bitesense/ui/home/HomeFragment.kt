@@ -15,15 +15,12 @@ import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentHomeBinding
-import com.c23ps323.bitesense.entities.Product
-import com.c23ps323.bitesense.entities.ProductData
 import com.c23ps323.bitesense.ui.detail.DetailActivity
 import com.c23ps323.bitesense.utils.ViewModelFactory
 
 class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var list: ArrayList<Product> = arrayListOf()
     private val homeViewModel: HomeViewModel by viewModels {
         ViewModelFactory(requireContext())
     }
@@ -39,12 +36,10 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list.addAll(ProductData.listData)
-
         binding.btnNotification.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "Under Development",
+                getString(R.string.under_development),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -125,9 +120,9 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 homeViewModel.deleteProduct(product)
             }
         }
-        binding.rvLastScannedItems.adapter = productAdapter
         productAdapter.submitList(products)
         binding.apply {
+            rvLastScannedItems.adapter = productAdapter
             rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
             rvLastScannedItems.setHasFixedSize(true)
         }

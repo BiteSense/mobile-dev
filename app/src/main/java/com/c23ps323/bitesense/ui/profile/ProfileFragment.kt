@@ -66,7 +66,7 @@ class ProfileFragment : Fragment() {
                         binding.apply {
                             tvName.text = result.data.data?.result?.username
                             tvEmail.text = result.data.data?.result?.email
-                            tvPhone.text = result.data.data?.result?.noTelepon.toString()
+                            tvPhone.text = getString(R.string.phone_number, result.data.data?.result?.noTelepon.toString())
                             rowName.setOnClickListener {
                                 navigateToEdit("Username", result.data.data?.result?.username.toString())
                             }

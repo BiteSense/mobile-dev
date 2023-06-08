@@ -17,6 +17,9 @@ class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
 
+    private var myFile: File? = null
+    private var uri: Uri? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,22 +28,29 @@ class PreviewFragment : Fragment() {
         return binding.root
     }
 
+    @Suppress("DEPRECATION")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get File from bundle
+        myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable(EXTRA_PICTURE, File::class.java)
+        } else {
+            arguments?.getSerializable(EXTRA_PICTURE)
+        } as? File
+
+        // Get Uri from bundle
+        uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(EXTRA_URI, Uri::class.java)
+        } else {
+            arguments?.getParcelable(EXTRA_URI)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        @Suppress("DEPRECATION")
         if(arguments != null) {
-            val myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getSerializable(EXTRA_PICTURE, File::class.java)
-            } else {
-                arguments?.getSerializable(EXTRA_PICTURE)
-            } as? File
-            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable(EXTRA_URI, Uri::class.java)
-            } else {
-                arguments?.getParcelable(EXTRA_URI)
-            }
-
             if(uri != null) {
                 binding.ivPreview.setImageURI(uri)
             }
