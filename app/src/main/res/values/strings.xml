@@ -68,4 +68,6 @@
     <string name="download">Download</string>
     <string name="text_qr_download">Use the BiteSense app to create QR code in your product and receive good food traceability</string>
     <string name="my_qr_code">My QR Code</string>
+    <string name="expired_date">Expired Date</string>
+    <string name="date_exp">EXP: 04-09-23</string>
 </resources>
