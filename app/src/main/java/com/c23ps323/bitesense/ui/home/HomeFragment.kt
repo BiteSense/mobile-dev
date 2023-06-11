@@ -25,7 +25,7 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private val binding get() = _binding!!
     private var list: ArrayList<Product> = arrayListOf()
     private val homeViewModel: HomeViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(

@@ -6,11 +6,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
-class AuthPreferencesDataSource  constructor(private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>) {
+class AuthPreferencesDataSource  constructor(private val dataStore: DataStore<Preferences>) {
 
     /**
      * Get user's authentication token
@@ -36,5 +37,16 @@ class AuthPreferencesDataSource  constructor(private val dataStore: DataStore<an
 
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("token_data")
+        @Volatile
+        private var instance: AuthPreferencesDataSource? = null
+
+        fun getInstance(dataStore: DataStore<Preferences>): AuthPreferencesDataSource {
+            return instance ?: synchronized(this) {
+                AuthPreferencesDataSource(dataStore).also {
+                    instance = it
+                }
+            }
+        }
+
     }
 }

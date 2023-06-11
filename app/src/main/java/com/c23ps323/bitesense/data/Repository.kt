@@ -3,16 +3,20 @@ package com.c23ps323.bitesense.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.c23ps323.bitesense.data.local.AuthPreferencesDataSource
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
-import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
-import com.c23ps323.bitesense.data.remote.response.ProductResponse
-import com.c23ps323.bitesense.data.remote.response.UserResponse
+import com.c23ps323.bitesense.data.remote.response.*
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class Repository private constructor(
     private val apiService: ApiService,
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
+    private val preferencesDataSource: AuthPreferencesDataSource
 ) {
     fun getUserHealthCondition(): LiveData<Result<HealthConditionResponse>> = liveData {
         emit(Result.Loading)
@@ -97,15 +101,50 @@ class Repository private constructor(
         emitSource(localData)
     }
 
+
+    suspend fun userLogin(email: String, password: String): Flow<Result<LoginResponse>> = flow {
+        try {
+            val response = apiService.userLogin(email, password)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(Result.Error(e.message.toString()))
+        }
+    }.flowOn(Dispatchers.IO)
+
+
+    suspend fun userRegister(
+        name: String,
+        email: String,
+        password: String,
+        repassword: String,
+    ): Flow<Result<RegisterResponse>> = flow {
+        try {
+            val response = apiService.userRegister(name, email, password,repassword)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(Result.Error(e.message.toString()))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun saveAuthToken(token: String) {
+        preferencesDataSource.saveAuthToken(token)
+    }
+
+
+    fun getAuthToken(): Flow<String?> = preferencesDataSource.getAuthToken()
+
     companion object {
         @Volatile
         private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
-            productDao: ProductDao
+            productDao: ProductDao,
+            preferencesDataSource: AuthPreferencesDataSource
         ): Repository =
             instance ?: synchronized(this) {
-                instance ?: Repository(apiService, productDao)
+                instance ?: Repository(apiService, productDao,preferencesDataSource)
             }.also { instance = it }
     }
 }

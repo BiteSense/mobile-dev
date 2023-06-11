@@ -22,7 +22,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
     private lateinit var userPreference: UserPreference
     private val userHealthConditions = mutableListOf<String>()

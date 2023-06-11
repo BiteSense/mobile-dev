@@ -65,4 +65,7 @@
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
     <string name="change_title">Change %s</string>
+    <string name="download">Download</string>
+    <string name="text_qr_download">Use the BiteSense app to create QR code in your product and receive good food traceability</string>
+    <string name="my_qr_code">My QR Code</string>
 </resources>
