@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
+import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
@@ -16,6 +17,36 @@ class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao
 ) {
+    fun editTelepon(telepon: String): LiveData<Result<EditProfileResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.editTelepon(telepon)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun editEmail(email: String): LiveData<Result<EditProfileResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.editEmail(email)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun editUsername(username: String): LiveData<Result<EditProfileResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.editUsername(username)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun uploadProduct(
         productImage: MultipartBody.Part
     ): LiveData<Result<UploadProductResponse>> = liveData {
