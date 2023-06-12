@@ -4,11 +4,11 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
@@ -61,8 +61,8 @@ class PreviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(arguments != null) {
-            if(uri != null) {
+        if (arguments != null) {
+            if (uri != null) {
                 binding.ivPreview.setImageURI(uri)
             }
 
@@ -76,11 +76,7 @@ class PreviewFragment : Fragment() {
         }
 
         binding.btnAnalyze.setOnClickListener {
-//            uploadProduct()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_camera, ScannedProductFragment(), ScannedProductFragment::class.java.simpleName)
-                .addToBackStack(null)
-                .commit()
+            uploadProduct()
         }
     }
 
@@ -89,13 +85,13 @@ class PreviewFragment : Fragment() {
             val file = reduceFileImage(myFile as File)
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
             val imageMultiPart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "photo",
+                "file",
                 file.name,
                 requestImageFile,
             )
             previewViewModel.uploadProduct(imageMultiPart).observe(viewLifecycleOwner) { result ->
                 if (result != null) {
-                    when(result) {
+                    when (result) {
                         is Result.Loading -> showLoading(true)
                         is Result.Success -> {
                             showLoading(false)
@@ -104,7 +100,15 @@ class PreviewFragment : Fragment() {
                                 "Uploading",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            parentFragmentManager.beginTransaction()
+                                .replace(
+                                    R.id.frame_camera,
+                                    ScannedProductFragment(),
+                                    ScannedProductFragment::class.java.simpleName
+                                )
+                                .commit()
                         }
+
                         is Result.Error -> {
                             showLoading(false)
                             Toast.makeText(
