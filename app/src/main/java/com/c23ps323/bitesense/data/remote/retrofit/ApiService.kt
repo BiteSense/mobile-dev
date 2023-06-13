@@ -14,6 +14,9 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface ApiService {
+    @GET("products/scan")
+    suspend fun getScannedProducts(): ProductResponse
+
     @FormUrlEncoded
     @POST("users/profile/telepon")
     suspend fun editTelepon(
@@ -46,9 +49,6 @@ interface ApiService {
 
     @GET("products/lastscan")
     suspend fun getProductLastScan(): ProductResponse
-
-    @GET("products/favorite")
-    suspend fun getFavoriteProduct(): ProductResponse
 
     @GET("products/all")
     suspend fun getAllProduct(): ProductResponse

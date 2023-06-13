@@ -10,6 +10,7 @@ import com.c23ps323.bitesense.ui.history.HistoryViewModel
 import com.c23ps323.bitesense.ui.home.HomeViewModel
 import com.c23ps323.bitesense.ui.preview.PreviewViewModel
 import com.c23ps323.bitesense.ui.profile.ProfileViewModel
+import com.c23ps323.bitesense.ui.scannedProduct.ScannedProductViewModel
 
 class ViewModelFactory(private val context: Context) :
     ViewModelProvider.Factory {
@@ -33,6 +34,9 @@ class ViewModelFactory(private val context: Context) :
             }
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(Injection.provideRepository(context)) as T
+            }
+            modelClass.isAssignableFrom(ScannedProductViewModel::class.java) -> {
+                ScannedProductViewModel(Injection.provideRepository(context)) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

@@ -17,6 +17,33 @@ class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao
 ) {
+    fun getScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getScannedProducts()
+            val products = response.data
+            val productList = products?.map {
+                val isFavorite = productDao.isFavoriteProduct(it?.namaProduk!!)
+                ProductEntity(
+                    it.idProduk.toString(),
+                    it.namaProduk,
+                    it.fotoProduk!!,
+                    it.tagProduk.toString(),
+                    it.deskripsiProduk.toString(),
+                    it.komposisiProduk.toString(),
+                    it.alert!!,
+                    isFavorite
+                )
+            }
+            productDao.deleteAll()
+            productDao.insertProducts(productList!!)
+        } catch (e: Exception) {
+            emit(Result.Error(e.toString()))
+        }
+        val localData: LiveData<Result<List<ProductEntity>>> = productDao.getProducts().map { Result.Success(it) }
+        emitSource(localData)
+    }
+
     fun editTelepon(telepon: String): LiveData<Result<EditProfileResponse>> = liveData {
         emit(Result.Loading)
         try {
