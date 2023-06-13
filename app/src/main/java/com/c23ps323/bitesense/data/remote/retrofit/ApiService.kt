@@ -6,20 +6,21 @@ import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
 import okhttp3.MultipartBody
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface ApiService {
+    @FormUrlEncoded
     @POST("users/profile/telepon")
     suspend fun editTelepon(
         @Field("telepon") telepon: String
     ): EditProfileResponse
+
+    @FormUrlEncoded
     @POST("users/profile/email")
     suspend fun editEmail(
         @Field("email") email: String

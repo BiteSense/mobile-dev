@@ -45,46 +45,102 @@ class EditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onBackPressed()
-        binding.etProfile.setText(profileValue)
-        binding.tvTitle.text = getString(R.string.change_title, title)
-        binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
-            hideBottomNav(false)
-        }
-        binding.btnSubmit.setOnClickListener {
-            editProfileViewModel.editUsername(binding.etProfile.text.toString()).observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when(result) {
-                        is Result.Loading -> showLoading(true)
-                        is Result.Success -> {
-                            showLoading(false)
-                            parentFragmentManager.beginTransaction()
-                                .replace(R.id.frame_container, ProfileFragment(), ProfileFragment::class.java.simpleName)
-                                .commit()
-                            val fragmentManager = requireActivity().supportFragmentManager
-                            for (i in 0 until fragmentManager.backStackEntryCount) {
-                                fragmentManager.popBackStack()
-                            }
-                            hideBottomNav(false)
-                        }
-                        is Result.Error -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                requireContext(),
-                                result.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+        setupUI()
+    }
+
+    private fun setupUI() {
+        binding.apply {
+            etProfile.setText(profileValue)
+            tvTitle.text = getString(R.string.change_title, title)
+            btnBack.setOnClickListener {
+                parentFragmentManager.popBackStack()
+                hideBottomNav(false)
+            }
+            btnSubmit.setOnClickListener {
+                when (title) {
+                    "Username" -> {
+                        usernameEdit()
+                    }
+
+                    "Email" -> {
+                        emailEdit()
+                    }
+
+                    else -> {
+                        teleponEdit()
                     }
                 }
             }
         }
     }
 
+    private fun successEdit() {
+        showLoading(false)
+        val fragmentManager = requireActivity().supportFragmentManager
+        for (i in 0 until fragmentManager.backStackEntryCount) {
+            fragmentManager.popBackStack()
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(
+                R.id.frame_container,
+                ProfileFragment(),
+                ProfileFragment::class.java.simpleName
+            )
+            .commit()
+        hideBottomNav(false)
+    }
+
+    private fun editFail(msg: String) {
+        showLoading(false)
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun teleponEdit() {
+        editProfileViewModel.editTelepon(binding.etProfile.text.toString())
+            .observe(viewLifecycleOwner) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> showLoading(true)
+                        is Result.Success -> successEdit()
+                        is Result.Error -> editFail(result.error)
+                    }
+                }
+            }
+    }
+
+    private fun emailEdit() {
+        editProfileViewModel.editEmail(binding.etProfile.text.toString())
+            .observe(viewLifecycleOwner) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> showLoading(true)
+                        is Result.Success -> successEdit()
+                        is Result.Error -> editFail(result.error)
+                    }
+                }
+            }
+    }
+
+    private fun usernameEdit() {
+        editProfileViewModel.editUsername(binding.etProfile.text.toString())
+            .observe(viewLifecycleOwner) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> showLoading(true)
+                        is Result.Success -> successEdit()
+                        is Result.Error -> editFail(result.error)
+                    }
+                }
+            }
+    }
+
     private fun onBackPressed() {
         val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true)
-            {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     hideBottomNav(false)
                     parentFragmentManager.popBackStack()
