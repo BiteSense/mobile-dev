@@ -43,6 +43,10 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupButton()
+    }
+
+    private fun setupButton() {
         binding.captureImage.setOnClickListener {
             takePhoto()
         }
@@ -121,7 +125,7 @@ class CameraFragment : Fragment() {
                 override fun onError(exception: ImageCaptureException) {
                     Toast.makeText(
                         requireContext(),
-                        "Failed to take picture",
+                        getString(R.string.take_picture_failed),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -156,7 +160,7 @@ class CameraFragment : Fragment() {
             } catch (e: Exception) {
                 Toast.makeText(
                     requireContext(),
-                    "Failed to find camera",
+                    getString(R.string.failed_find_camera),
                     Toast.LENGTH_SHORT
                 ).show()
             }

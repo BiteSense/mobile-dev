@@ -9,7 +9,6 @@
     tools:context=".ui.home.HomeFragment">
 
 
-
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
@@ -24,15 +23,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/profile_image"
-                android:src="@drawable/chris"
+                android:src="@drawable/default_profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -53,7 +49,7 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hello, Chris"
+                    android:text="@string/hello_user"
                     android:textColor="@color/mainTextColor"
                     android:textSize="22sp"
                     android:textStyle="bold"

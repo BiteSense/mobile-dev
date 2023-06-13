@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             }
         }
         binding.btnGenereteQr.setOnClickListener {
-            Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.under_development),Toast.LENGTH_SHORT).show()
         }
 
     }

@@ -4,6 +4,12 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def getBaseUrl() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("BASE_URL");
+}
+
 android {
     namespace 'com.c23ps323.bitesense'
     compileSdk 33
@@ -16,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", "\""+getBaseUrl()+"\""
     }
 
     buildTypes {
@@ -33,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 

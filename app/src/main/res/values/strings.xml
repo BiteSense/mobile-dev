@@ -65,4 +65,14 @@
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
     <string name="change_title">Change %s</string>
+    <string name="permission_granted">Camera permission granted</string>
+    <string name="permission_denied">Camera permission denied</string>
+    <string name="take_picture_failed">Failed to take picture</string>
+    <string name="failed_find_camera">Failed to find camera</string>
+    <string name="under_development">Under Development</string>
+    <string name="hello_user">Hello, User</string>
+    <string name="user">User</string>
+    <string name="sample_email">example@gmail.com</string>
+    <string name="sample_number">+62 123456789</string>
+    <string name="phone_number">+62 %s</string>
 </resources>

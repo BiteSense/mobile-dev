@@ -18,7 +18,7 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:paddingBottom="40dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 
 

@@ -19,20 +19,24 @@ class CameraActivity : AppCompatActivity() {
         _binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
+        checkPermission()
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.frame_camera, CameraFragment(), CameraFragment::class.java.simpleName)
+                .commit()
+        }
+    }
+
+    private fun checkPermission() {
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
                 REQUIRED_PERMISSIONS,
                 REQUEST_CODE_PERMISSIONS
             )
-        }
-
-        supportActionBar?.hide()
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.frame_camera, CameraFragment(), CameraFragment::class.java.simpleName)
-                .commit()
         }
     }
 
@@ -43,12 +47,14 @@ class CameraActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            Toast.makeText(
-                this,
-                "Can't get permissions",
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
         }
     }
 
