@@ -1,6 +1,7 @@
 package com.c23ps323.bitesense.utils
 
 import android.content.Context
+import android.os.Build.VERSION_CODES.S
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -11,9 +12,12 @@ import com.c23ps323.bitesense.di.Injection
 import com.c23ps323.bitesense.ui.auth.login.LoginViewModel
 import com.c23ps323.bitesense.ui.auth.register.RegisterViewModel
 import com.c23ps323.bitesense.ui.favorite.FavoriteViewModel
+import com.c23ps323.bitesense.ui.generateqr.InputGenerateQrViewModel
 import com.c23ps323.bitesense.ui.history.HistoryViewModel
 import com.c23ps323.bitesense.ui.home.HomeViewModel
 import com.c23ps323.bitesense.ui.profile.ProfileViewModel
+import com.c23ps323.bitesense.ui.splash.SplashActivity
+import com.c23ps323.bitesense.ui.splash.SplashViewModel
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "users")
@@ -39,7 +43,13 @@ class ViewModelFactory(private val repository: Repository) :
                 LoginViewModel(repository) as T
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) ->{
-                LoginViewModel(repository) as T
+                RegisterViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(SplashViewModel::class.java) ->{
+                SplashViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputGenerateQrViewModel::class.java) ->{
+                InputGenerateQrViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

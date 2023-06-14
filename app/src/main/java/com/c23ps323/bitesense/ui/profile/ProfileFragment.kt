@@ -1,6 +1,8 @@
 package com.c23ps323.bitesense.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
+import com.c23ps323.bitesense.ui.auth.AuthActivity
+import com.c23ps323.bitesense.ui.auth.login.LoginFragment
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
 import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
@@ -169,7 +173,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.btn_logout -> {
-                userPreference.removeUserCookie()
+                profileViewModel.saveAuthToken("")
+                Intent(requireContext(),AuthActivity::class.java).also {
+                    startActivity(it)
+                }
                 Toast.makeText(
                     requireContext(),
                     "Logout Success",

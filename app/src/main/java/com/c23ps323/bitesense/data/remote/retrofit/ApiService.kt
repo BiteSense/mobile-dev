@@ -1,10 +1,7 @@
 package com.c23ps323.bitesense.data.remote.retrofit
 
 import com.c23ps323.bitesense.data.remote.response.*
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiService {
     @GET("users/preference")
@@ -21,6 +18,15 @@ interface ApiService {
 
     @GET("products/all")
     suspend fun getAllProduct(): ProductResponse
+    @FormUrlEncoded
+    @POST("qrcode/inputProduct")
+    suspend fun createQrCode(
+        @Header("Authorization") token: String,
+        @Field("nama_produk") nama_produk : String,
+        @Field("komposisi_produk") komposisi_produk : String,
+        @Field("expired") expired : String,
+        @Field("tgl_produksi") tgl_produksi : String,
+    ) : GenerateQrCode
 
     @FormUrlEncoded
     @POST("users/login")
@@ -32,9 +38,9 @@ interface ApiService {
     @FormUrlEncoded
     @POST("users/register")
     suspend fun userRegister(
-        @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String,
         @Field("repassword") repassword : String,
+        @Field("username") name: String,
     ): RegisterResponse
 }
