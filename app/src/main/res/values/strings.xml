@@ -65,6 +65,7 @@
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
     <string name="change_title">Change %s</string>
+
     <string name="download">Download</string>
     <string name="text_qr_download">Use the BiteSense app to create QR code in your product and receive good food traceability</string>
     <string name="my_qr_code">My QR Code</string>
@@ -79,5 +80,17 @@
     <string name="registration_error_message">Registration failed, please try again.</string>
     <string name="registration_success">Registration success</string>
     <string name="generate_succes">Generate QR success</string>
+
+
+    <string name="permission_granted">Camera permission granted</string>
+    <string name="permission_denied">Camera permission denied</string>
+    <string name="take_picture_failed">Failed to take picture</string>
+    <string name="failed_find_camera">Failed to find camera</string>
+    <string name="under_development">Under Development</string>
+    <string name="hello_user">Hello, User</string>
+    <string name="user">User</string>
+    <string name="sample_email">example@gmail.com</string>
+    <string name="sample_number">+62 123456789</string>
+    <string name="phone_number">+62 %s</string>
 
 </resources>

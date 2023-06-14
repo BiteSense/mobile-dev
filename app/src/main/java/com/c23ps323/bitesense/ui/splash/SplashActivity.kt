@@ -16,6 +16,7 @@ import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.MainActivity.Companion.EXTRA_TOKEN
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.ui.auth.AuthActivity
+
 import com.c23ps323.bitesense.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -26,11 +27,18 @@ class SplashActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels{
         ViewModelFactory.getInstance(this)
     }
+
+import com.c23ps323.bitesense.utils.UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        userPreference = UserPreference(this)
+        cookie = userPreference!!.getUserCookie()
+
         hideSystemUI()
+
 
         determineUserDirection()
     }
@@ -55,6 +63,7 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun hideSystemUI() {

@@ -156,7 +156,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cb_fish" />
 
 
-
     <CheckBox
         android:id="@+id/cb_dairy"
         android:layout_width="wrap_content"
@@ -225,7 +224,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cb_dairy" />
 
 
-
     <CheckBox
         android:id="@+id/cb_diabetes"
         android:layout_width="wrap_content"
@@ -269,20 +267,14 @@
         android:id="@+id/btn_submit"
         android:layout_width="342dp"
         android:layout_height="50dp"
-        android:backgroundTint="@color/primaryColor"
         android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rounded_button"
         android:text="@string/submit"
         android:textColor="@color/mainTextColor"
+        app:backgroundTint="@color/primaryColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

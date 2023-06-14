@@ -11,10 +11,14 @@ import com.c23ps323.bitesense.data.Repository
 import com.c23ps323.bitesense.di.Injection
 import com.c23ps323.bitesense.ui.auth.login.LoginViewModel
 import com.c23ps323.bitesense.ui.auth.register.RegisterViewModel
+
+import com.c23ps323.bitesense.ui.editProfile.EditProfileViewModel
+
 import com.c23ps323.bitesense.ui.favorite.FavoriteViewModel
 import com.c23ps323.bitesense.ui.generateqr.InputGenerateQrViewModel
 import com.c23ps323.bitesense.ui.history.HistoryViewModel
 import com.c23ps323.bitesense.ui.home.HomeViewModel
+import com.c23ps323.bitesense.ui.preview.PreviewViewModel
 import com.c23ps323.bitesense.ui.profile.ProfileViewModel
 import com.c23ps323.bitesense.ui.splash.SplashActivity
 import com.c23ps323.bitesense.ui.splash.SplashViewModel
@@ -50,6 +54,14 @@ class ViewModelFactory(private val repository: Repository) :
             }
             modelClass.isAssignableFrom(InputGenerateQrViewModel::class.java) ->{
                 InputGenerateQrViewModel(repository) as T
+            }
+
+
+            modelClass.isAssignableFrom(PreviewViewModel::class.java) -> {
+                PreviewViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
+                EditProfileViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

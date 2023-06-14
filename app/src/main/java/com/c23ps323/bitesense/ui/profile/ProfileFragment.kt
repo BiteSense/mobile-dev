@@ -15,13 +15,16 @@ import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
 import com.c23ps323.bitesense.ui.auth.AuthActivity
+
 import com.c23ps323.bitesense.ui.auth.login.LoginFragment
+
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
+import com.c23ps323.bitesense.ui.preference.PreferenceActivity
 import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment(), View.OnClickListener {
+class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -43,7 +46,17 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         userPreference = UserPreference(requireContext())
-        setupButton()
+
+        binding.btnLogout.setOnClickListener {
+            userPreference.removeUserCookie()
+            Toast.makeText(
+                requireContext(),
+                "Logout Success",
+                Toast.LENGTH_SHORT
+            ).show()
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            requireActivity().finish()
+        }
 
         profileViewModel.getUserProfile.observe(viewLifecycleOwner) { result ->
             if (result != null) {
@@ -57,7 +70,16 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                         binding.apply {
                             tvName.text = result.data.data?.result?.username
                             tvEmail.text = result.data.data?.result?.email
-                            tvPhone.text = result.data.data?.result?.noTelepon.toString()
+                            tvPhone.text = getString(R.string.phone_number, result.data.data?.result?.noTelepon.toString())
+                            rowName.setOnClickListener {
+                                navigateToEdit("Username", result.data.data?.result?.username.toString())
+                            }
+                            rowPhone.setOnClickListener {
+                                navigateToEdit("Phone Number", result.data.data?.result?.noTelepon.toString())
+                            }
+                            rowEmail.setOnClickListener {
+                                navigateToEdit("Email", result.data.data?.result?.email.toString())
+                            }
                         }
                     }
 
@@ -103,6 +125,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                             it
                         }
                         binding.tvHealth.text = text
+                        binding.rowHealth.setOnClickListener {
+                            startActivity(Intent(requireContext(), PreferenceActivity::class.java))
+                        }
                     }
 
                     is Result.Error -> {
@@ -116,14 +141,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    private fun setupButton() {
-        binding.rowName.setOnClickListener(this)
-        binding.rowEmail.setOnClickListener(this)
-        binding.rowPhone.setOnClickListener(this)
-        binding.rowHealth.setOnClickListener(this)
-        binding.btnLogout.setOnClickListener(this)
     }
 
     override fun onDestroy() {
@@ -149,6 +166,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         super.onPause()
         userHealthConditions.clear()
     }
+
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -185,6 +203,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
 
     private fun navigateToEdit(title: String, value: String) {
         val editProfileFragment = EditProfileFragment()

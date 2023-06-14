@@ -32,6 +32,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BiteSense"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".ui.detailqr.DetailQrActivity"
@@ -55,9 +56,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.auth.AuthActivity"
-            android:exported="true">
 
-        </activity>
+            android:exported="true" />
+
         <activity
             android:name=".ui.camera.CameraActivity"
             android:exported="false" />

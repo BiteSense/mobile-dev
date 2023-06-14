@@ -21,7 +21,6 @@ import com.c23ps323.bitesense.utils.ViewModelFactory
 class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!
-    private var list: ArrayList<Product> = arrayListOf()
     private val historyViewModel: HistoryViewModel by viewModels {
         ViewModelFactory.getInstance(requireContext())
     }
@@ -36,8 +35,6 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        list.addAll(ProductData.listData)
 
         historyViewModel.getHistoryProducts.observe(viewLifecycleOwner) { result ->
             if (result != null) {

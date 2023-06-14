@@ -85,9 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             }
         }
         binding.btnGenereteQr.setOnClickListener {
+
             Intent(this,InputGenerateQRActivity::class.java).also {
                 startActivity(it)
             }
+
         }
 
     }

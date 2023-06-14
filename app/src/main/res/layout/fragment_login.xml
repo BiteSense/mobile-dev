@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:context=".ui.auth.login.LoginFragment"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.auth.login.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -42,10 +42,11 @@
             android:layout_height="60dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="124dp"
-            android:backgroundTint="@color/primaryColor"
+            android:background="@drawable/rounded_button"
             android:text="@string/login"
             android:textColor="@color/mainTextColor"
             android:textStyle="bold"
+            app:backgroundTint="@color/primaryColor"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +78,8 @@
                 android:text="@string/register"
                 android:textColor="@color/primaryColor"
                 android:textStyle="bold" />
-
         </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputEmail"
@@ -142,6 +143,7 @@
                 android:layout_centerInParent="true" />
 
         </RelativeLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
