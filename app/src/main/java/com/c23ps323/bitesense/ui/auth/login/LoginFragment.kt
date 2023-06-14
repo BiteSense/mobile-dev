@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
 
             btnLogin.setOnClickListener {
                 val userPreference = UserPreference(requireContext())
-                userPreference.saveUserCookie("id_user=36785492; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjM2Nzg1NDkyLCJpYXQiOjE2ODY2NjY5MTAsImV4cCI6MTY4Njc1MzMxMH0.3QY9_usAaXEjDhC1MX-9j3EfAHvdItSTSUQzTl4J-0I")
+                userPreference.saveUserCookie("id_user=36785492; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjM2Nzg1NDkyLCJpYXQiOjE2ODY2NjY5MTAsImV4cCI6MTY4Njc1MzMxMH0.3QY9_usAaXEjDhC1MX-9j3EfAHvdItSTSUQzTl4J-0I;")
                 Intent(requireContext(), PreferenceActivity::class.java).also {
                     startActivity(it)
                 }

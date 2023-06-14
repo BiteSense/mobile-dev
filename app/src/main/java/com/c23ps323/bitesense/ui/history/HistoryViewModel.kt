@@ -7,7 +7,7 @@ import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import kotlinx.coroutines.launch
 
 class HistoryViewModel(private val repository: Repository) : ViewModel() {
-    val getHistoryProducts = repository.getHistoryProducts()
+    val getHistoryProducts = repository.getAllProducts()
 
     fun saveProduct(product: ProductEntity) {
         viewModelScope.launch {
