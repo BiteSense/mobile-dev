@@ -1,10 +1,21 @@
 package com.c23ps323.bitesense.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.c23ps323.bitesense.data.local.AuthPreferencesDataSource
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
+
+import com.c23ps323.bitesense.data.Result
+import com.c23ps323.bitesense.data.remote.response.*
+import com.c23ps323.bitesense.data.remote.retrofit.ApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
 import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
@@ -13,9 +24,11 @@ import com.c23ps323.bitesense.data.remote.response.UserResponse
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
 import okhttp3.MultipartBody
 
+
 class Repository private constructor(
     private val apiService: ApiService,
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
+    private val preferencesDataSource: AuthPreferencesDataSource
 ) {
     fun editTelepon(telepon: String): LiveData<Result<EditProfileResponse>> = liveData {
         emit(Result.Loading)
@@ -142,15 +155,72 @@ class Repository private constructor(
         emitSource(localData)
     }
 
+
+    suspend fun userLogin(email: String, password: String): Flow<kotlin.Result<LoginResponse>> = flow {
+        try {
+            val response = apiService.userLogin(email, password)
+            emit(kotlin.Result.success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+
+    suspend fun userRegister(
+        name: String,
+        email: String,
+        password: String,
+        repassword: String,
+    ): Flow<kotlin.Result<RegisterResponse>> = flow {
+        try {
+            val response = apiService.userRegister(email, password,repassword,name)
+            emit(kotlin.Result.success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun saveAuthToken(token: String) {
+        preferencesDataSource.saveAuthToken(token)
+    }
+
+    suspend fun createQrCode(
+        token: String,
+        nama_produk : String,
+        komposisi_produk : String,
+        expired : String,
+        tgl_produksi : String
+    ) : Flow<kotlin.Result<GenerateQrCode>> = flow{
+        try {
+            val bearerToken = generateBearerToken(token)
+            Log.d("Token", bearerToken)
+            val response = apiService.createQrCode(bearerToken,nama_produk,komposisi_produk,expired,tgl_produksi)
+            emit(kotlin.Result.success(response))
+        }catch (e : Exception){
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
+
+    private fun generateBearerToken(token: String): String {
+        return "Bearer $token"
+    }
+    fun getAuthToken(): Flow<String?> = preferencesDataSource.getAuthToken()
+
     companion object {
         @Volatile
         private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
-            productDao: ProductDao
+            productDao: ProductDao,
+            preferencesDataSource: AuthPreferencesDataSource
         ): Repository =
             instance ?: synchronized(this) {
-                instance ?: Repository(apiService, productDao)
+                instance ?: Repository(apiService, productDao,preferencesDataSource)
             }.also { instance = it }
     }
 }

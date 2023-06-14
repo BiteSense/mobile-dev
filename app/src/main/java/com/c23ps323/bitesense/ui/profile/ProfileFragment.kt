@@ -2,6 +2,7 @@ package com.c23ps323.bitesense.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,9 @@ import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
 import com.c23ps323.bitesense.ui.auth.AuthActivity
+
+import com.c23ps323.bitesense.ui.auth.login.LoginFragment
+
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
 import com.c23ps323.bitesense.ui.preference.PreferenceActivity
 import com.c23ps323.bitesense.utils.UserPreference
@@ -25,7 +29,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
     private lateinit var userPreference: UserPreference
     private val userHealthConditions = mutableListOf<String>()
@@ -162,6 +166,44 @@ class ProfileFragment : Fragment() {
         super.onPause()
         userHealthConditions.clear()
     }
+
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.row_name -> {
+                navigateToEdit("Username", "Chrisnico")
+            }
+
+            R.id.row_email -> {
+                navigateToEdit("Email", "tes@example.com")
+            }
+
+            R.id.row_phone -> {
+                navigateToEdit("Phone Number", "12334234")
+            }
+
+            R.id.row_health -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Under Development",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            R.id.btn_logout -> {
+                profileViewModel.saveAuthToken("")
+                Intent(requireContext(),AuthActivity::class.java).also {
+                    startActivity(it)
+                }
+                Toast.makeText(
+                    requireContext(),
+                    "Logout Success",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
 
     private fun navigateToEdit(title: String, value: String) {
         val editProfileFragment = EditProfileFragment()

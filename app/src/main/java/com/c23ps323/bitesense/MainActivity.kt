@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.c23ps323.bitesense.databinding.ActivityMainBinding
 import com.c23ps323.bitesense.ui.camera.CameraActivity
 import com.c23ps323.bitesense.ui.favorite.FavoriteFragment
+import com.c23ps323.bitesense.ui.generateqr.InputGenerateQRActivity
 import com.c23ps323.bitesense.ui.history.HistoryFragment
 import com.c23ps323.bitesense.ui.home.HomeFragment
 import com.c23ps323.bitesense.ui.profile.ProfileFragment
@@ -84,7 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             }
         }
         binding.btnGenereteQr.setOnClickListener {
-            Toast.makeText(this,getString(R.string.under_development),Toast.LENGTH_SHORT).show()
+
+            Intent(this,InputGenerateQRActivity::class.java).also {
+                startActivity(it)
+            }
+
         }
 
     }
@@ -147,5 +152,9 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             .replace(R.id.frame_container, tempFragment)
             .commit()
         return true
+    }
+
+    companion object {
+        const val EXTRA_TOKEN = "extra_token"
     }
 }
