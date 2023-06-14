@@ -1,6 +1,5 @@
 package com.c23ps323.bitesense.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -83,9 +82,19 @@ class ProductAdapter(
         }
         val ivFavorite = holder.binding.ivFavorite
         if (products.isFavorite) {
-            ivFavorite.setImageDrawable(ContextCompat.getDrawable(ivFavorite.context, R.drawable.round_favorite_24))
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_24
+                )
+            )
         } else {
-            ivFavorite.setImageDrawable(ContextCompat.getDrawable(ivFavorite.context, R.drawable.round_favorite_border_24))
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_border_24
+                )
+            )
         }
         ivFavorite.setOnClickListener {
             products.isFavorite = !products.isFavorite

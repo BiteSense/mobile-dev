@@ -75,4 +75,5 @@
     <string name="sample_email">example@gmail.com</string>
     <string name="sample_number">+62 123456789</string>
     <string name="phone_number">+62 %s</string>
+    <string name="success_upload">Success Uploading</string>
 </resources>

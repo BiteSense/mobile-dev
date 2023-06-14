@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         showSystemUI()
+        onBackPressed()
 
         scannedProductViewModel.scannedProduct.observe(viewLifecycleOwner) { result ->
             if (result != null) {
@@ -52,13 +54,26 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         Toast.makeText(
                             context,
-                            result.error,
+                            "Something went wrong",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             }
         }
+    }
+
+    private fun onBackPressed() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            callback
+        )
     }
 
     private fun showSystemUI() {

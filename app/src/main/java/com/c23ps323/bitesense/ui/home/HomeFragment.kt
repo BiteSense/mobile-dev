@@ -44,6 +44,34 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
             ).show()
         }
 
+        setupUserData()
+        setupProductData()
+    }
+
+    private fun setupProductData() {
+        homeViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        setupRecyclerView(result.data)
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            context,
+                            result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupUserData() {
         homeViewModel.user.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
@@ -53,32 +81,13 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         Glide.with(requireContext())
                             .load(result.data.data?.result?.fotoUser)
                             .into(binding.ivProfile)
-                        binding.tvName.text = getString(R.string.greet_user, result.data.data?.result?.username)
+                        binding.tvName.text =
+                            getString(R.string.greet_user, result.data.data?.result?.username)
                     }
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
                             requireContext(),
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
-
-        homeViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        setupRecyclerView(result.data)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            context,
                             result.error,
                             Toast.LENGTH_SHORT
                         ).show()

@@ -16,7 +16,7 @@ interface ProductDao {
     @Query("SELECT * FROM products where isFavorite = 1")
     fun getFavoriteProducts(): LiveData<List<ProductEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProducts(news: List<ProductEntity>)
 
     @Update

@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
         binding.btnScanProduct.setOnClickListener {
             startCameraX()
+            shrinkFab()
         }
         binding.btnScanQrCode.setOnClickListener {
             Intent(this, ScannerQRActivity::class.java).also {
