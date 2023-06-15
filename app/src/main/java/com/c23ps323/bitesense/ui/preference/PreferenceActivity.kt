@@ -8,7 +8,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.ActivityPreferenceBinding
-
+import com.c23ps323.bitesense.ui.detailqr.DetailQrActivity
 
 
 class PreferenceActivity : AppCompatActivity() {

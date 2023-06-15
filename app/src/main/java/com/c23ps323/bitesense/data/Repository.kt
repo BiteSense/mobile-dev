@@ -189,6 +189,19 @@ class Repository private constructor(
         preferencesDataSource.saveAuthToken(token)
     }
 
+    suspend fun scanQR(
+        id_produk : Int
+    ):Flow<kotlin.Result<ScanQRResponse>> = flow{
+        try {
+            val response = apiService.scanQR(id_produk)
+            emit(kotlin.Result.success(response))
+        }catch (e : Exception){
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+
+    }
+
     suspend fun createQrCode(
         nama_produk : String,
         komposisi_produk : String,
@@ -206,9 +219,7 @@ class Repository private constructor(
     }.flowOn(Dispatchers.IO)
 
 
-    private fun generateBearerToken(token: String): String {
-        return "Bearer $token"
-    }
+
     fun getAuthToken(): Flow<String?> = preferencesDataSource.getAuthToken()
 
     companion object {

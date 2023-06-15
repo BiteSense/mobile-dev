@@ -39,7 +39,6 @@ class GenerateQRActivity : AppCompatActivity() {
         }
 
 
-
         if (qrCodeBase64 != null) {
             binding.ivQrcode.loadFromBase64(qrCodeBase64)
         }

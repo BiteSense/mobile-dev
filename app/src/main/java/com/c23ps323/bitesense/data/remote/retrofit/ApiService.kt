@@ -83,4 +83,10 @@ interface ApiService {
         @Field("repassword") repassword : String,
         @Field("username") name: String,
     ): RegisterResponse
+
+    @FormUrlEncoded
+    @POST("qrcode/scanProduct")
+    suspend fun scanQR(
+        @Field("id_produk") id_produk : Int
+    ) : ScanQRResponse
 }

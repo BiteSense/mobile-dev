@@ -11,6 +11,7 @@ import com.c23ps323.bitesense.data.Repository
 import com.c23ps323.bitesense.di.Injection
 import com.c23ps323.bitesense.ui.auth.login.LoginViewModel
 import com.c23ps323.bitesense.ui.auth.register.RegisterViewModel
+import com.c23ps323.bitesense.ui.detailqr.DetailQrViewModel
 
 import com.c23ps323.bitesense.ui.editProfile.EditProfileViewModel
 
@@ -63,6 +64,9 @@ class ViewModelFactory(private val repository: Repository) :
             }
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailQrViewModel::class.java) ->{
+                DetailQrViewModel(repository)  as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
