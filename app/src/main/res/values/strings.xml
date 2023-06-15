@@ -86,4 +86,7 @@
     <string name="grains">Biji-Bijian</string>
     <string name="salicylates">Salicylates</string>
     <string name="food_coloring">Pewarna Makanan</string>
+    <string name="fill_it">Fill it First</string>
+    <string name="success_edit">Success Edit</string>
+    <string name="general_error">Something went wrong</string>
 </resources>
