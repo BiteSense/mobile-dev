@@ -57,12 +57,11 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         setupRecyclerView(result.data)
                     }
-
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
                             context,
-                            result.error,
+                            getString(R.string.general_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -88,7 +87,7 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         Toast.makeText(
                             requireContext(),
-                            result.error,
+                            getString(R.string.general_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -122,6 +121,8 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
     private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         val productAdapter = ProductAdapter(this) { product ->
             if (product.isFavorite) {
                 homeViewModel.saveProduct(product)
@@ -131,9 +132,9 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
         productAdapter.submitList(products)
         binding.apply {
-            rvLastScannedItems.adapter = productAdapter
-            rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
+            rvLastScannedItems.layoutManager = linearLayoutManager
             rvLastScannedItems.setHasFixedSize(true)
+            rvLastScannedItems.adapter = productAdapter
         }
     }
 }

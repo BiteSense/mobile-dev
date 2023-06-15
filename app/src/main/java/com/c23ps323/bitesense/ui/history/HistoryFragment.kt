@@ -75,19 +75,20 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
     private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         val productAdapter = ProductAdapter(this) { product ->
             if (product.isFavorite) {
                 historyViewModel.saveProduct(product)
             } else {
                 historyViewModel.deleteProduct(product)
             }
-
         }
-        binding.rvHistoryItems.adapter = productAdapter
         productAdapter.submitList(products)
         binding.apply {
-            rvHistoryItems.layoutManager = LinearLayoutManager(requireContext())
+            rvHistoryItems.layoutManager = linearLayoutManager
             rvHistoryItems.setHasFixedSize(true)
+            rvHistoryItems.adapter = productAdapter
         }
     }
 }
