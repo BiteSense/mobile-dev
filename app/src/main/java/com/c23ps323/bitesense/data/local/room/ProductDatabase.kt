@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 
-@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ProductEntity::class], version = 2, exportSchema = false)
 abstract class ProductDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
@@ -18,7 +18,7 @@ abstract class ProductDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     ProductDatabase::class.java, "Products.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
             }
     }
 }

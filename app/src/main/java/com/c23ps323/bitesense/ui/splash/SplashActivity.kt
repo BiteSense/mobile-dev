@@ -28,14 +28,9 @@ class SplashActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-import com.c23ps323.bitesense.utils.UserPreference
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-        userPreference = UserPreference(this)
-        cookie = userPreference!!.getUserCookie()
 
         hideSystemUI()
 

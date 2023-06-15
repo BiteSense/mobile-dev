@@ -2,7 +2,10 @@ package com.c23ps323.bitesense.data.remote.retrofit
 
 import android.content.Context
 import com.c23ps323.bitesense.BuildConfig
+import com.c23ps323.bitesense.data.Repository
+import com.c23ps323.bitesense.data.local.AuthPreferencesDataSource
 import com.c23ps323.bitesense.utils.UserPreference
+import com.c23ps323.bitesense.utils.dataStore
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,7 +38,7 @@ class ApiConfig {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl("https://bitesense-api-pzlrrpolma-et.a.run.app/api/")
 
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)

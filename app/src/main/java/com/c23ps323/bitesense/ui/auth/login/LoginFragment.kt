@@ -2,6 +2,10 @@ package com.c23ps323.bitesense.ui.auth.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
+
 import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.MainActivity.Companion.EXTRA_TOKEN
 
@@ -54,12 +58,53 @@ class LoginFragment : Fragment() {
 
     private fun setActions() {
         binding.apply {
+            etPassword.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrEmpty() && p0.length < 8){
+                        etPassword.error = getString(R.string.et_password_error_message)
+                        inputPassword.isPasswordVisibilityToggleEnabled = false
+                        btnLogin.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnLogin.isEnabled = true
+                        inputPassword.isPasswordVisibilityToggleEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            etEmail.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(p0).matches()){
+                        etEmail.error = getString(R.string.et_email_error_message)
+                        btnLogin.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnLogin.isEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
             btnRegister.setOnClickListener(
                 Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment)
             )
 
             btnLogin.setOnClickListener {
-
                     handleLogin()
             }
 
@@ -77,22 +122,49 @@ class LoginFragment : Fragment() {
 
             loginJob = launch {
                 loginViewModel.userLogin(email, password).collect { result ->
-                    result.onSuccess { credentials  ->
 
-                        credentials.data?.token?.let { token ->
-                            loginViewModel.saveAuthToken(token)
-                            Intent(requireContext(), PreferenceActivity::class.java).also { intent ->
-                                intent.putExtra(EXTRA_TOKEN, token)
-                                startActivity(intent)
-                                requireActivity().finish()
+                    result.onSuccess { cookie ->
+                        cookie.headers().get("set-cookie").let {
+                            val id = it?.split(" ")
+
+                            cookie.body()?.data?.token.let {credential ->
+                                val token = "token=$credential"
+
+                                val cookies = "${id?.get(0)} $token"
+                                Log.d("cookies", cookies)
+                                val userPreference = UserPreference(requireContext())
+                                userPreference.saveUserCookie(cookies)
+                                if (credential != null) {
+                                    loginViewModel.saveAuthToken(credential)
+                                }
+                                Intent(requireContext(),PreferenceActivity::class.java).also {
+                                    startActivity(it)
+                                }
                             }
+
                         }
 
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.login_success_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+
+
+
+//                        credentials.data?.token?.let { token ->
+//                            loginViewModel.saveAuthToken("")
+//                            Intent(
+//                                requireContext(),
+//                                PreferenceActivity::class.java
+//                            ).also { intent ->
+//                                intent.putExtra(EXTRA_TOKEN, token)
+//                                startActivity(intent)
+//                                requireActivity().finish()
+//                            }
+//                        }
+//
+//                        Toast.makeText(
+//                            requireContext(),
+//                            getString(R.string.login_success_message),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
 
                     result.onFailure {
@@ -111,10 +183,11 @@ class LoginFragment : Fragment() {
 //                     startActivity(it)
 // >>>>>>> development
 //                 }
+                }
             }
+
+
         }
-
-
     }
     private fun setLoadingState(isLoading: Boolean) {
         binding.apply {
@@ -129,6 +202,7 @@ class LoginFragment : Fragment() {
             }
         }
     }
+
 }
 
 

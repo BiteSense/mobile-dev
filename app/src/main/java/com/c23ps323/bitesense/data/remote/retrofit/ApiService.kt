@@ -10,6 +10,8 @@ import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
 import okhttp3.MultipartBody
+import retrofit2.Response
+
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -60,7 +62,6 @@ interface ApiService {
     @FormUrlEncoded
     @POST("qrcode/inputProduct")
     suspend fun createQrCode(
-        @Header("Authorization") token: String,
         @Field("nama_produk") nama_produk : String,
         @Field("komposisi_produk") komposisi_produk : String,
         @Field("expired") expired : String,
@@ -72,7 +73,7 @@ interface ApiService {
     suspend fun userLogin(
         @Field("email") email: String,
         @Field("password") password: String
-    ): LoginResponse
+    ): Response<LoginResponse>
 
     @FormUrlEncoded
     @POST("users/register")

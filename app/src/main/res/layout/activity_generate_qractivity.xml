@@ -6,9 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.generateqr.GenerateQRActivity">
 
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/baseline_arrow_back_ios_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
@@ -23,9 +33,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/iv_qrcode"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:src="@drawable/image_loading_placeholder"

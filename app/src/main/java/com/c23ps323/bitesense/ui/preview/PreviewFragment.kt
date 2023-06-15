@@ -26,7 +26,7 @@ class PreviewFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val previewViewModel: PreviewViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
     private var myFile: File? = null
     private var uri: Uri? = null

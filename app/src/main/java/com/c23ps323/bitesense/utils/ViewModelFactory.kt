@@ -3,8 +3,8 @@ package com.c23ps323.bitesense.utils
 import android.content.Context
 import android.os.Build.VERSION_CODES.S
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.c23ps323.bitesense.data.Repository
@@ -24,7 +24,8 @@ import com.c23ps323.bitesense.ui.splash.SplashActivity
 import com.c23ps323.bitesense.ui.splash.SplashViewModel
 
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "users")
+
+val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "users")
 
 class ViewModelFactory(private val repository: Repository) :
     ViewModelProvider.NewInstanceFactory() {

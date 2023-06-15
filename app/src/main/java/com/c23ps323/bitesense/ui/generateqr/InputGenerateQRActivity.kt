@@ -25,7 +25,6 @@ class InputGenerateQRActivity : AppCompatActivity() {
     private lateinit var binding : ActivityInputGenerateQractivityBinding
 
     private var generateQrJob : Job = Job()
-    private var token: String = ""
     private val inputGenerateQrViewModel : InputGenerateQrViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
@@ -34,21 +33,14 @@ class InputGenerateQRActivity : AppCompatActivity() {
         binding = ActivityInputGenerateQractivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        lifecycleScope.launchWhenCreated {
-            launch {
-                inputGenerateQrViewModel.getAuthToken().collect { authToken ->
-                    if (!authToken.isNullOrEmpty()) token = authToken
-                    Log.d("Token", "token $token")
-                }
-            }
-        }
         setActions()
-
-
 
     }
 
     private fun setActions() {
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.ivDate.setOnClickListener {
             clickDatePicker()
         }
@@ -56,10 +48,7 @@ class InputGenerateQRActivity : AppCompatActivity() {
             clickDatePicker2()
         }
         binding.btnGenerateQr.setOnClickListener {
-            Intent(this,GenerateQRActivity::class.java).also {
-                startActivity(it)
-            }
-//            handleGenerateQR()
+            handleGenerateQR()
         }
     }
 
@@ -73,11 +62,10 @@ class InputGenerateQRActivity : AppCompatActivity() {
             if (generateQrJob.isActive) generateQrJob.cancel()
 
             generateQrJob = launch {
-                Log.d("Token", "token 3 $token")
-                inputGenerateQrViewModel.createQrCode(token,name,komposisi_,expired,tgl_produksi).collect{result ->
+                inputGenerateQrViewModel.createQrCode(name,komposisi_,expired,tgl_produksi).collect{result ->
                     result.onSuccess {data ->
                         Toast.makeText(this@InputGenerateQRActivity,
-                            getString(R.string.registration_success),
+                            getString(R.string.generate_succes),
                             Toast.LENGTH_SHORT
                         ).show()
                         data.data?.let {data ->
@@ -153,6 +141,8 @@ class InputGenerateQRActivity : AppCompatActivity() {
             day)
         dpd.show()
     }
+
+
 }
 
 

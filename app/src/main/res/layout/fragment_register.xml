@@ -43,7 +43,7 @@
 
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/primaryColor"
-
+            android:enabled="false"
             android:text="@string/sign_up"
             android:textColor="@color/mainTextColor"
             android:textStyle="bold"
@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:enabled="false"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/btn_register"
@@ -137,6 +136,7 @@
             app:hintTextColor="@color/primaryColor"
             app:boxBackgroundColor="@color/white"
             android:layout_marginStart="16dp"
+            app:endIconMode="password_toggle"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             app:startIconDrawable="@drawable/ic_baseline_password_24"
@@ -161,6 +161,7 @@
             app:boxBackgroundColor="@color/white"
             app:boxStrokeColor="@color/primaryColor"
             app:hintTextColor="@color/primaryColor"
+            app:endIconMode="password_toggle"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"

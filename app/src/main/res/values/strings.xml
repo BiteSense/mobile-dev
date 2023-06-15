@@ -92,5 +92,11 @@
     <string name="sample_email">example@gmail.com</string>
     <string name="sample_number">+62 123456789</string>
     <string name="phone_number">+62 %s</string>
+    <string name="ex_komposisi">ex:Sugar,soda,natrium</string>
+    <string name="ex_name_product">ex:Cola,Teh gelas</string>
+    <string name="et_email_error_message">Email address is not valid</string>
+    <string name="et_username_error_message">Username must be filled</string>
+
+
 
 </resources>

@@ -24,6 +24,7 @@ import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
+
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -48,6 +49,7 @@ class ProfileFragment : Fragment() {
         userPreference = UserPreference(requireContext())
 
         binding.btnLogout.setOnClickListener {
+            profileViewModel.saveAuthToken("")
             userPreference.removeUserCookie()
             Toast.makeText(
                 requireContext(),
@@ -168,41 +170,41 @@ class ProfileFragment : Fragment() {
     }
 
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.row_name -> {
-                navigateToEdit("Username", "Chrisnico")
-            }
-
-            R.id.row_email -> {
-                navigateToEdit("Email", "tes@example.com")
-            }
-
-            R.id.row_phone -> {
-                navigateToEdit("Phone Number", "12334234")
-            }
-
-            R.id.row_health -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Under Development",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            R.id.btn_logout -> {
-                profileViewModel.saveAuthToken("")
-                Intent(requireContext(),AuthActivity::class.java).also {
-                    startActivity(it)
-                }
-                Toast.makeText(
-                    requireContext(),
-                    "Logout Success",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+//    override fun onClick(v: View?) {
+//        when (v?.id) {
+//            R.id.row_name -> {
+//                navigateToEdit("Username", "Chrisnico")
+//            }
+//
+//            R.id.row_email -> {
+//                navigateToEdit("Email", "tes@example.com")
+//            }
+//
+//            R.id.row_phone -> {
+//                navigateToEdit("Phone Number", "12334234")
+//            }
+//
+//            R.id.row_health -> {
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Under Development",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//
+//            R.id.btn_logout -> {
+//                profileViewModel.saveAuthToken("")
+//                Intent(requireContext(),AuthActivity::class.java).also {
+//                    startActivity(it)
+//                }
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Logout Success",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//    }
 
 
     private fun navigateToEdit(title: String, value: String) {
