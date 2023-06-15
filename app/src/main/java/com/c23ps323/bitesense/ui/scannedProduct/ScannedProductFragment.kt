@@ -10,15 +10,18 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentScannedProductBinding
 import com.c23ps323.bitesense.ui.detail.DetailActivity
 import com.c23ps323.bitesense.utils.ViewModelFactory
+
 
 class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentScannedProductBinding? = null
@@ -68,6 +71,9 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     requireActivity().finish()
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(

@@ -36,9 +36,9 @@ class ProductAdapter(
                 )
                 when (product.warningIndicator) {
                     0 -> binding.warningIndicator.apply {
-                        setText(R.string.danger)
+                        setText(R.string.safe)
                         chipBackgroundColor =
-                            ContextCompat.getColorStateList(context, R.color.dangerColor)
+                            ContextCompat.getColorStateList(context, R.color.safeColor)
                         isClickable = false
                     }
 
@@ -50,9 +50,9 @@ class ProductAdapter(
                     }
 
                     2 -> binding.warningIndicator.apply {
-                        setText(R.string.safe)
+                        setText(R.string.danger)
                         chipBackgroundColor =
-                            ContextCompat.getColorStateList(context, R.color.safeColor)
+                            ContextCompat.getColorStateList(context, R.color.dangerColor)
                         isClickable = false
                     }
 

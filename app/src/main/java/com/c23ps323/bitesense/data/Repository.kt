@@ -7,10 +7,12 @@ import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
 import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
+import com.c23ps323.bitesense.data.remote.response.LoginResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
 import com.c23ps323.bitesense.utils.UserPreference
+import com.google.gson.JsonElement
 import okhttp3.MultipartBody
 
 class Repository private constructor(
@@ -18,6 +20,48 @@ class Repository private constructor(
     private val productDao: ProductDao,
     private val userPreference: UserPreference
 ) {
+    fun updatePreference(preference: JsonElement): LiveData<Result<UploadProductResponse>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val response = apiService.updatePreference(preference)
+                emit(Result.Success(response))
+            } catch (e: Exception) {
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun register(
+        username: String, email: String, password: String, repassword: String
+    ): LiveData<Result<UploadProductResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.register(username, email, password, repassword)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun login(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.login(email, password)
+            val headerResponse = response.headers()
+            val headerMapList: Map<String, List<String>> = headerResponse.toMultimap()
+            val allCookies: List<String> = headerMapList["set-cookie"]!!
+            var cookieVal = ""
+            for (i in 1 until allCookies.size) {
+                val newCookie = allCookies[i].replace("\\s*Path=/\\s*".toRegex(), "")
+                cookieVal += newCookie
+            }
+            userPreference.saveUserCookie(cookieVal)
+            emit(Result.Success(response.body()!!))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
         try {
@@ -36,10 +80,15 @@ class Repository private constructor(
                     isFavorite
                 )
             }
-            emit(Result.Success(productList!!))
+            productDao.deleteAll()
+            productDao.insertProducts(productList!!)
+            emit(Result.Success(productList))
         } catch (e: Exception) {
             emit(Result.Error(e.toString()))
         }
+        val localData: LiveData<Result<List<ProductEntity>>> =
+            productDao.getScannedProducts().map { Result.Success(it) }
+        emitSource(localData)
     }
 
     fun editTelepon(telepon: String): LiveData<Result<EditProfileResponse>> = liveData {
@@ -79,11 +128,11 @@ class Repository private constructor(
         try {
             val tempCookie = userPreference.getUserCookie()
             val response = apiService.uploadProduct(productImage)
-            val body = response.body()!!
-            val newCookie = response.headers()["set-cookie"]
+            val responseCookie: String = response.headers()["set-cookie"]!!
+            val newCookie = responseCookie.replace("\\s*Path=/\\s*".toRegex(), "")
             userPreference.removeUserCookie()
             userPreference.saveUserCookie("$tempCookie $newCookie")
-            emit(Result.Success(body))
+            emit(Result.Success(response.body()!!))
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
         }
@@ -108,6 +157,8 @@ class Repository private constructor(
             emit(Result.Error(e.message.toString()))
         }
     }
+
+    suspend fun deleteAllData() = productDao.deleteTable()
 
     fun getFavoriteProducts(): LiveData<List<ProductEntity>> = productDao.getFavoriteProducts()
 
@@ -147,7 +198,7 @@ class Repository private constructor(
     fun getLastScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.getProductLastScan()
+            val response = apiService.getAllProduct()
             val products = response.data
             val productList = products?.map {
                 val isFavorite = productDao.isFavoriteProduct(it?.idProduk!!.toString())
@@ -162,7 +213,8 @@ class Repository private constructor(
                     isFavorite
                 )
             }
-            emit(Result.Success(productList!!))
+            productDao.deleteAll()
+            productDao.insertProducts(productList!!)
         } catch (e: Exception) {
             emit(Result.Error(e.toString()))
         }
@@ -178,9 +230,8 @@ class Repository private constructor(
             apiService: ApiService,
             productDao: ProductDao,
             userPreference: UserPreference,
-        ): Repository =
-            instance ?: synchronized(this) {
-                instance ?: Repository(apiService, productDao, userPreference)
-            }.also { instance = it }
+        ): Repository = instance ?: synchronized(this) {
+            instance ?: Repository(apiService, productDao, userPreference)
+        }.also { instance = it }
     }
 }

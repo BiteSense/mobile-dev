@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
+import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
 import com.c23ps323.bitesense.ui.auth.AuthActivity
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
@@ -45,6 +46,7 @@ class ProfileFragment : Fragment() {
 
         binding.btnLogout.setOnClickListener {
             userPreference.removeUserCookie()
+            profileViewModel.deleteAllData()
             Toast.makeText(
                 requireContext(),
                 "Logout Success",
@@ -66,12 +68,21 @@ class ProfileFragment : Fragment() {
                         binding.apply {
                             tvName.text = result.data.data?.result?.username
                             tvEmail.text = result.data.data?.result?.email
-                            tvPhone.text = getString(R.string.phone_number, result.data.data?.result?.noTelepon.toString())
+                            tvPhone.text = getString(
+                                R.string.phone_number,
+                                result.data.data?.result?.noTelepon.toString()
+                            )
                             rowName.setOnClickListener {
-                                navigateToEdit("Username", result.data.data?.result?.username.toString())
+                                navigateToEdit(
+                                    "Username",
+                                    result.data.data?.result?.username.toString()
+                                )
                             }
                             rowPhone.setOnClickListener {
-                                navigateToEdit("Phone Number", result.data.data?.result?.noTelepon.toString())
+                                navigateToEdit(
+                                    "Phone Number",
+                                    result.data.data?.result?.noTelepon.toString()
+                                )
                             }
                             rowEmail.setOnClickListener {
                                 navigateToEdit("Email", result.data.data?.result?.email.toString())
@@ -97,30 +108,10 @@ class ProfileFragment : Fragment() {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
-                        val dataPenyakit = result.data.data?.dataPenyakit
-                        val dataKondisi = result.data.data?.dataKondisi
-                        val dataFood = result.data.data?.dataFood
-                        lifecycleScope.launch {
-                            if (dataFood!!.isNotEmpty()) {
-                                for (i in 0 until result.data.data.dataFood.size) {
-                                    userHealthConditions.add(result.data.data.dataFood[i]?.nameFood!!)
-                                }
-                            }
-                            if (dataPenyakit!!.isNotEmpty()) {
-                                for (i in 0 until result.data.data.dataPenyakit.size) {
-                                    userHealthConditions.add(result.data.data.dataPenyakit[i]?.namaPenyakit!!)
-                                }
-                            }
-                            if (dataKondisi!!.isNotEmpty()) {
-                                for (i in 0 until result.data.data.dataKondisi.size) {
-                                    userHealthConditions.add(result.data.data.dataKondisi[i]?.nameCondition!!)
-                                }
-                            }
-                        }
-                        val text = userHealthConditions.joinToString {
+                        dataConditionProcess(result.data)
+                        binding.tvHealth.text = userHealthConditions.joinToString {
                             it
                         }
-                        binding.tvHealth.text = text
                         binding.rowHealth.setOnClickListener {
                             startActivity(Intent(requireContext(), PreferenceActivity::class.java))
                         }
@@ -134,6 +125,29 @@ class ProfileFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                }
+            }
+        }
+    }
+
+    private fun dataConditionProcess(result: HealthConditionResponse) {
+        val dataPenyakit = result.data?.dataPenyakit
+        val dataKondisi = result.data?.dataKondisi
+        val dataFood = result.data?.dataFood
+        lifecycleScope.launch {
+            if (dataFood!!.isNotEmpty()) {
+                for (i in 0 until result.data.dataFood.size) {
+                    userHealthConditions.add(result.data.dataFood[i]?.nameFood!!)
+                }
+            }
+            if (dataPenyakit!!.isNotEmpty()) {
+                for (i in 0 until result.data.dataPenyakit.size) {
+                    userHealthConditions.add(result.data.dataPenyakit[i]?.namaPenyakit!!)
+                }
+            }
+            if (dataKondisi!!.isNotEmpty()) {
+                for (i in 0 until result.data.dataKondisi.size) {
+                    userHealthConditions.add(result.data.dataKondisi[i]?.nameCondition!!)
                 }
             }
         }

@@ -16,6 +16,9 @@ interface ProductDao {
     @Query("SELECT * FROM products ORDER BY product_id DESC LIMIT 5")
     fun getLastProducts(): LiveData<List<ProductEntity>>
 
+    @Query("SELECT * FROM products ORDER BY product_id DESC LIMIT 1")
+    fun getScannedProducts(): LiveData<List<ProductEntity>>
+
     @Query("SELECT * FROM products where isFavorite = 1 GROUP BY name")
     fun getFavoriteProducts(): LiveData<List<ProductEntity>>
 
@@ -30,6 +33,9 @@ interface ProductDao {
 
     @Query("DELETE FROM products WHERE isFavorite = 0")
     suspend fun deleteAll()
+
+    @Query("DELETE FROM products")
+    suspend fun deleteTable()
 
     @Query("SELECT EXISTS(SELECT * FROM products WHERE product_id = :id AND isFavorite = 1)")
     suspend fun isFavoriteProduct(id: String): Boolean

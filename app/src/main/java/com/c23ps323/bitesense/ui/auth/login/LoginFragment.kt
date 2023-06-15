@@ -5,17 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.c23ps323.bitesense.R
+import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.databinding.FragmentLoginBinding
 import com.c23ps323.bitesense.ui.preference.PreferenceActivity
 import com.c23ps323.bitesense.utils.UserPreference
+import com.c23ps323.bitesense.utils.ViewModelFactory
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private val loginViewModel: LoginViewModel by viewModels {
+        ViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,14 +44,42 @@ class LoginFragment : Fragment() {
             )
 
             btnLogin.setOnClickListener {
-                val userPreference = UserPreference(requireContext())
-                userPreference.saveUserCookie("id_user=36785492; token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjM2Nzg1NDkyLCJpYXQiOjE2ODY2NjY5MTAsImV4cCI6MTY4Njc1MzMxMH0.3QY9_usAaXEjDhC1MX-9j3EfAHvdItSTSUQzTl4J-0I;")
-                Intent(requireContext(), PreferenceActivity::class.java).also {
-                    startActivity(it)
+                loginViewModel.login(
+                    binding.etEmail.text.toString(),
+                    binding.etPassword.text.toString()
+                ).observe(viewLifecycleOwner) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is Result.Loading -> showLoading(true)
+                            is Result.Success -> {
+                                showLoading(false)
+                                val userPreference = UserPreference(requireContext())
+                                val tempCookie = userPreference.getUserCookie()
+                                val token = result.data.data?.token
+                                userPreference.removeUserCookie()
+                                userPreference.saveUserCookie("$tempCookie token=$token;")
+                                Intent(requireContext(), PreferenceActivity::class.java).also {
+                                    startActivity(it)
+                                }
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Something went wrong",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
                 }
             }
 
         }
+    }
+
+    private fun showLoading(state: Boolean) {
+
     }
 
 }
