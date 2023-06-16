@@ -115,4 +115,8 @@
     <string name="et_email_error_message">Email address is not valid</string>
     <string name="et_username_error_message">Username must be filled</string>
     <string name="tanggal_produksi">Tanggal Produksi</string>
+    <string name="tab_text_1">Description</string>
+    <string name="tab_text_2">Composition</string>
+    <string name="fail_get_detail">Failed to get detail product</string>
+    <string name="no_data">No data</string>
 </resources>
