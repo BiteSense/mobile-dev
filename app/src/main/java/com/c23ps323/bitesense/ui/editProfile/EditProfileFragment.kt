@@ -23,7 +23,7 @@ class EditProfileFragment : Fragment() {
     private var profileValue: String? = null
 
     private val editProfileViewModel: EditProfileViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(

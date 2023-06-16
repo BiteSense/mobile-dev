@@ -19,13 +19,13 @@ data class HealthConditionResponse(
 
 data class DataKondisi(
 
-	@field:SerializedName("dataKondisi")
+	@field:SerializedName("data_kondisi")
 	val dataKondisi: List<DataKondisiItem?>? = null,
 
-	@field:SerializedName("dataFood")
+	@field:SerializedName("data_food")
 	val dataFood: List<DataFoodItem?>? = null,
 
-	@field:SerializedName("dataPenyakit")
+	@field:SerializedName("data_penyakit")
 	val dataPenyakit: List<DataPenyakitItem?>? = null
 )
 

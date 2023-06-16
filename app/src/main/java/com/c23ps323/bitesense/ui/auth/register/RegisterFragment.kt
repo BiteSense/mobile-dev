@@ -1,6 +1,9 @@
 package com.c23ps323.bitesense.ui.auth.register
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +47,91 @@ class RegisterFragment : Fragment() {
 
     private fun setActions() {
         binding.apply {
+
+            edtPassword.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrEmpty() && p0.length < 8){
+                        edtPassword.error = getString(R.string.et_password_error_message)
+                        inputPassword.isPasswordVisibilityToggleEnabled = false
+                        btnRegister.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnRegister.isEnabled = true
+                        inputPassword.isPasswordVisibilityToggleEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            edtRepassword.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrEmpty() && p0.length < 8){
+                        edtRepassword.error = getString(R.string.et_password_error_message)
+                        inputRepassword.isPasswordVisibilityToggleEnabled = false
+                        btnRegister.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnRegister.isEnabled = true
+                        inputRepassword.isPasswordVisibilityToggleEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            edtEmail.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(p0).matches()){
+                        edtEmail.error = getString(R.string.et_email_error_message)
+                        btnRegister.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnRegister.isEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            edtUsername.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (p0.isNullOrEmpty()){
+                        edtUsername.error = getString(R.string.et_username_error_message)
+                        btnRegister.isEnabled = false
+                    }else if (p0!!.length >= 8){
+                        btnRegister.isEnabled = true
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
             btnLogin.setOnClickListener(
                 Navigation.createNavigateOnClickListener(R.id.action_registerFragment_to_loginFragment)
             )

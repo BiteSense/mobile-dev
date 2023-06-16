@@ -73,6 +73,7 @@
     <string name="date_exp">EXP: 04-09-23</string>
     <string name="login_error_message">Login failed, please try again.</string>
     <string name="generate_error_message">Generate failed, please try again.</string>
+    <string name="scanqr_error_message">Scan failed, please try again.</string>
 
     <string name="login_success_message">Login success</string>
     <string name="confirm_password">Confirm Password</string>
@@ -92,5 +93,11 @@
     <string name="sample_email">example@gmail.com</string>
     <string name="sample_number">+62 123456789</string>
     <string name="phone_number">+62 %s</string>
+    <string name="ex_komposisi">ex:Sugar,soda,natrium</string>
+    <string name="ex_name_product">ex:Cola,Teh gelas</string>
+    <string name="et_email_error_message">Email address is not valid</string>
+    <string name="et_username_error_message">Username must be filled</string>
+    <string name="tanggal_produksi">Tanggal Produksi</string>
+
 
 </resources>

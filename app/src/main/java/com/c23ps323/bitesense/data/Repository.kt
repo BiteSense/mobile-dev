@@ -21,8 +21,9 @@ import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
-import com.c23ps323.bitesense.data.remote.retrofit.ApiService
+
 import okhttp3.MultipartBody
+import retrofit2.Response
 
 
 class Repository private constructor(
@@ -156,9 +157,11 @@ class Repository private constructor(
     }
 
 
-    suspend fun userLogin(email: String, password: String): Flow<kotlin.Result<LoginResponse>> = flow {
+    suspend fun userLogin(email: String, password: String): Flow<kotlin.Result<Response<LoginResponse>>> = flow {
         try {
+
             val response = apiService.userLogin(email, password)
+            val header = response.headers().get("set-cookie")
             emit(kotlin.Result.success(response))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -186,17 +189,27 @@ class Repository private constructor(
         preferencesDataSource.saveAuthToken(token)
     }
 
+    suspend fun scanQR(
+        id_produk : Int
+    ):Flow<kotlin.Result<ScanQRResponse>> = flow{
+        try {
+            val response = apiService.scanQR(id_produk)
+            emit(kotlin.Result.success(response))
+        }catch (e : Exception){
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+
+    }
+
     suspend fun createQrCode(
-        token: String,
         nama_produk : String,
         komposisi_produk : String,
         expired : String,
         tgl_produksi : String
     ) : Flow<kotlin.Result<GenerateQrCode>> = flow{
         try {
-            val bearerToken = generateBearerToken(token)
-            Log.d("Token", bearerToken)
-            val response = apiService.createQrCode(bearerToken,nama_produk,komposisi_produk,expired,tgl_produksi)
+            val response = apiService.createQrCode(nama_produk,komposisi_produk,expired,tgl_produksi)
             emit(kotlin.Result.success(response))
         }catch (e : Exception){
             e.printStackTrace()
@@ -206,9 +219,7 @@ class Repository private constructor(
     }.flowOn(Dispatchers.IO)
 
 
-    private fun generateBearerToken(token: String): String {
-        return "Bearer $token"
-    }
+
     fun getAuthToken(): Flow<String?> = preferencesDataSource.getAuthToken()
 
     companion object {

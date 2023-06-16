@@ -9,7 +9,7 @@ private val repository: Repository
 ) : ViewModel() {
 
 
-  suspend fun createQrCode( token : String, nama_produk : String, komposisi_produk : String, expired : String, tgl_produksi : String)= repository.createQrCode(token,nama_produk,komposisi_produk,expired,tgl_produksi)
+  suspend fun createQrCode(  nama_produk : String, komposisi_produk : String, expired : String, tgl_produksi : String)= repository.createQrCode(nama_produk,komposisi_produk,expired,tgl_produksi)
 
   fun getAuthToken(): Flow<String?> = repository.getAuthToken()
 

@@ -3,14 +3,15 @@ package com.c23ps323.bitesense.utils
 import android.content.Context
 import android.os.Build.VERSION_CODES.S
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.c23ps323.bitesense.data.Repository
 import com.c23ps323.bitesense.di.Injection
 import com.c23ps323.bitesense.ui.auth.login.LoginViewModel
 import com.c23ps323.bitesense.ui.auth.register.RegisterViewModel
+import com.c23ps323.bitesense.ui.detailqr.DetailQrViewModel
 
 import com.c23ps323.bitesense.ui.editProfile.EditProfileViewModel
 
@@ -24,7 +25,8 @@ import com.c23ps323.bitesense.ui.splash.SplashActivity
 import com.c23ps323.bitesense.ui.splash.SplashViewModel
 
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "users")
+
+val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "users")
 
 class ViewModelFactory(private val repository: Repository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -62,6 +64,9 @@ class ViewModelFactory(private val repository: Repository) :
             }
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) -> {
                 EditProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailQrViewModel::class.java) ->{
+                DetailQrViewModel(repository)  as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -46,6 +46,7 @@
             android:text="@string/login"
             android:textColor="@color/mainTextColor"
             android:textStyle="bold"
+            android:enabled="false"
             app:backgroundTint="@color/primaryColor"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -86,21 +87,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:boxStrokeColor="@color/primaryColor"
-            app:hintTextColor="@color/primaryColor"
-            app:startIconDrawable="@drawable/round_email_24"
-            app:boxBackgroundColor="@color/white"
             android:layout_marginEnd="16dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@color/primaryColor"
+            app:counterEnabled="false"
+            app:hintTextColor="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:startIconDrawable="@drawable/round_email_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:inputType="textEmailAddress"
                 android:layout_height="wrap_content"
-                android:hint="Email" />
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -109,21 +111,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:startIconDrawable="@drawable/ic_baseline_password_24"
-            app:boxStrokeColor="@color/primaryColor"
-            app:hintTextColor="@color/primaryColor"
-            app:boxBackgroundColor="@color/white"
             android:layout_marginEnd="16dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@color/primaryColor"
+            app:errorIconDrawable="@null"
+            app:endIconMode="password_toggle"
+            app:hintTextColor="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputEmail">
+            app:layout_constraintTop_toBottomOf="@+id/inputEmail"
+            app:startIconDrawable="@drawable/ic_baseline_password_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Password" />
+                android:hint="@string/password"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -134,8 +138,10 @@
             android:alpha="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <ProgressBar
                 android:layout_width="wrap_content"
