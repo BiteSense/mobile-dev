@@ -2,7 +2,6 @@ package com.c23ps323.bitesense.ui.preference
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,6 +11,7 @@ import com.c23ps323.bitesense.MainActivity
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
+import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.databinding.ActivityPreferenceBinding
 import com.c23ps323.bitesense.entities.ConditionItem
 import com.c23ps323.bitesense.entities.FoodItem
@@ -43,6 +43,45 @@ class PreferenceActivity : AppCompatActivity() {
 
         setupCheckboxListener()
 
+        getUserHealthCondition()
+
+        binding.btnSubmit.setOnClickListener {
+            uploadProcess()
+            preferenceViewModel.updatePreference(json!!).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> showLoading(true)
+                        is Result.Success -> successUpdate(result.data)
+                        is Result.Error -> showError(getString(R.string.general_error))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showError(msg: String) {
+        showLoading(false)
+        Toast.makeText(
+            this,
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun successUpdate(result: UploadProductResponse) {
+        showLoading(false)
+        Toast.makeText(
+            this,
+            result.message,
+            Toast.LENGTH_SHORT
+        ).show()
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+    }
+
+    private fun getUserHealthCondition() {
         preferenceViewModel.getUserHealthCondition.observe(this) { result ->
             if (result != null) {
                 when (result) {
@@ -53,55 +92,17 @@ class PreferenceActivity : AppCompatActivity() {
                         setupCheckbox()
                     }
 
-                    is Result.Error -> {
-                        Toast.makeText(
-                            this,
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
-
-        binding.btnSubmit.setOnClickListener {
-            uploadProcess()
-            preferenceViewModel.updatePreference(json!!).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is Result.Loading -> showLoading(true)
-                        is Result.Success -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                this,
-                                result.data.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            finish()
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            startActivity(intent)
-                        }
-
-                        is Result.Error -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                this,
-                                "Something went wrong",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    is Result.Error -> showError(result.error)
                 }
             }
         }
     }
 
-
     private fun uploadProcess() {
         val listDataKondisiInt = mutableListOf<ConditionItem>()
         val listDataFoodInt = mutableListOf<FoodItem>()
         val listDataPenyakitInt = mutableListOf<PenyakitItem>()
+
         if (dataKondisi.isNotEmpty()) {
             for (i in 0 until dataKondisi.size) {
                 when (dataKondisi[i]) {
@@ -147,10 +148,10 @@ class PreferenceActivity : AppCompatActivity() {
             }
         }
 
+        // Save the result to Health Condition object then convert to json
         val healthConditionData =
             HealthCondition(listDataPenyakitInt, listDataKondisiInt, listDataFoodInt)
         json = Gson().toJsonTree(healthConditionData)
-        Log.d("JSON", json.toString())
     }
 
     private fun setupCheckboxListener() {
@@ -357,6 +358,12 @@ class PreferenceActivity : AppCompatActivity() {
     }
 
     private fun showLoading(state: Boolean) {
-//        binding.btnSubmit.isEnabled = state
+        if (state) {
+            binding.btnSubmit.alpha = 0.6f
+            binding.btnSubmit.isEnabled = false
+        } else {
+            binding.btnSubmit.alpha = 1f
+            binding.btnSubmit.isEnabled = true
+        }
     }
 }

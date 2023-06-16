@@ -75,6 +75,7 @@
     <string name="sample_email">example@gmail.com</string>
     <string name="sample_number">+62 123456789</string>
     <string name="phone_number">+62 %s</string>
+    <string name="phone_number_text">Phone Number</string>
     <string name="success_upload">Success Uploading</string>
     <string name="obesity">Obesitas</string>
     <string name="gerd_maag">Gerd(Maag)</string>
@@ -89,4 +90,10 @@
     <string name="fill_it">Fill it First</string>
     <string name="success_edit">Success Edit</string>
     <string name="general_error">Something went wrong</string>
+    <string name="fill_preference">Please fill the preference</string>
+    <string name="upload_failed">Failed to upload</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="fail_get_user_data">Cannot get user data</string>
+    <string name="fail_get_user_health_condition">Cannot get user preference</string>
+    <string name="fail_scan_product">Failed to scan product</string>
 </resources>

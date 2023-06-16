@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
+import com.c23ps323.bitesense.data.remote.response.UserResponse
 import com.c23ps323.bitesense.databinding.FragmentProfileBinding
 import com.c23ps323.bitesense.ui.auth.AuthActivity
 import com.c23ps323.bitesense.ui.editProfile.EditProfileFragment
@@ -49,7 +50,7 @@ class ProfileFragment : Fragment() {
             profileViewModel.deleteAllData()
             Toast.makeText(
                 requireContext(),
-                "Logout Success",
+                getString(R.string.logout_success),
                 Toast.LENGTH_SHORT
             ).show()
             startActivity(Intent(requireContext(), AuthActivity::class.java))
@@ -60,44 +61,8 @@ class ProfileFragment : Fragment() {
             if (result != null) {
                 when (result) {
                     is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        Glide.with(requireContext())
-                            .load(result.data.data?.result?.fotoUser)
-                            .into(binding.ivProfile)
-                        binding.apply {
-                            tvName.text = result.data.data?.result?.username
-                            tvEmail.text = result.data.data?.result?.email
-                            tvPhone.text = getString(
-                                R.string.phone_number,
-                                result.data.data?.result?.noTelepon.toString()
-                            )
-                            rowName.setOnClickListener {
-                                navigateToEdit(
-                                    "Username",
-                                    result.data.data?.result?.username.toString()
-                                )
-                            }
-                            rowPhone.setOnClickListener {
-                                navigateToEdit(
-                                    "Phone Number",
-                                    result.data.data?.result?.noTelepon.toString()
-                                )
-                            }
-                            rowEmail.setOnClickListener {
-                                navigateToEdit("Email", result.data.data?.result?.email.toString())
-                            }
-                        }
-                    }
-
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    is Result.Success -> successGetDataUser(result.data)
+                    is Result.Error -> showError(getString(R.string.fail_get_user_data))
                 }
             }
         }
@@ -106,26 +71,62 @@ class ProfileFragment : Fragment() {
             if (result != null) {
                 when (result) {
                     is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        dataConditionProcess(result.data)
-                        binding.tvHealth.text = userHealthConditions.joinToString {
-                            it
-                        }
-                        binding.rowHealth.setOnClickListener {
-                            startActivity(Intent(requireContext(), PreferenceActivity::class.java))
-                        }
-                    }
-
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    is Result.Success -> successGetUserHealthCondition(result.data)
+                    is Result.Error -> showError(getString(R.string.fail_get_user_data))
                 }
+            }
+        }
+    }
+
+    private fun successGetUserHealthCondition(result: HealthConditionResponse) {
+        showLoading(false)
+        dataConditionProcess(result)
+        binding.tvHealth.text = userHealthConditions.joinToString {
+            it
+        }
+        binding.rowHealth.setOnClickListener {
+            startActivity(Intent(requireContext(), PreferenceActivity::class.java))
+        }
+    }
+
+    private fun showError(msg: String) {
+        showLoading(false)
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun successGetDataUser(result: UserResponse) {
+        showLoading(false)
+        Glide.with(requireContext())
+            .load(result.data?.result?.fotoUser)
+            .into(binding.ivProfile)
+        binding.apply {
+            tvName.text = result.data?.result?.username
+            tvEmail.text = result.data?.result?.email
+            tvPhone.text = getString(
+                R.string.phone_number,
+                result.data?.result?.noTelepon.toString()
+            )
+            rowName.setOnClickListener {
+                navigateToEdit(
+                    getString(R.string.username),
+                    result.data?.result?.username.toString()
+                )
+            }
+            rowPhone.setOnClickListener {
+                navigateToEdit(
+                    getString(R.string.phone_number_text),
+                    result.data?.result?.noTelepon.toString()
+                )
+            }
+            rowEmail.setOnClickListener {
+                navigateToEdit(
+                    getString(R.string.email),
+                    result.data?.result?.email.toString()
+                )
             }
         }
     }

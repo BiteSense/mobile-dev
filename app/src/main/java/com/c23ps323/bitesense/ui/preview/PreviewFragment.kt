@@ -4,7 +4,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,10 +42,19 @@ class PreviewFragment : Fragment() {
         return binding.root
     }
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getFileFromArguments()
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getFileFromUriOrBundle()
+        buttonSetup()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getFileFromArguments() {
         fileFromBundle = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable(EXTRA_PICTURE, File::class.java)
         } else {
@@ -60,9 +68,18 @@ class PreviewFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun buttonSetup() {
+        binding.apply {
+            btnClose.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+            btnAnalyze.setOnClickListener {
+                uploadProduct()
+            }
+        }
+    }
 
+    private fun getFileFromUriOrBundle() {
         if (arguments != null) {
             if (uri != null) {
                 uri.let {
@@ -76,22 +93,11 @@ class PreviewFragment : Fragment() {
                 binding.ivPreview.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
         }
-
-        binding.apply {
-            btnClose.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
-            btnAnalyze.setOnClickListener {
-                uploadProduct()
-            }
-        }
     }
 
     private fun uploadProduct() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
-            val length = file.length()
-            Log.d("ImageSize", (length / 1024).toString())
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
             val imageMultiPart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "file",
@@ -135,7 +141,7 @@ class PreviewFragment : Fragment() {
         } else {
             Toast.makeText(
                 requireContext(),
-                "Failed to upload",
+                getString(R.string.upload_failed),
                 Toast.LENGTH_SHORT
             ).show()
         }

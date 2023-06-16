@@ -10,11 +10,11 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.MainActivity
+import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
@@ -43,7 +43,10 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
         showSystemUI()
         onBackPressed()
+        scanProduct()
+    }
 
+    private fun scanProduct() {
         scannedProductViewModel.scannedProduct.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
@@ -57,7 +60,7 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         Toast.makeText(
                             context,
-                            "Something went wrong",
+                            getString(R.string.fail_scan_product),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
