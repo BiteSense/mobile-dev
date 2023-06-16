@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.c23ps323.bitesense.utils.animateVisibility
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-
 
 @Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
@@ -111,7 +109,6 @@ class LoginFragment : Fragment() {
                                 val cookies = "${id?.get(0)} $token;"
                                 val userPreference = UserPreference(requireContext())
                                 userPreference.saveUserCookie(cookies)
-                                Log.d("Cookie", userPreference.getUserCookie())
                                 if (credential != null) {
                                     loginViewModel.saveAuthToken(credential)
                                 }
@@ -120,6 +117,7 @@ class LoginFragment : Fragment() {
                                     PreferenceActivity::class.java
                                 ).also { intent ->
                                     startActivity(intent)
+                                    requireActivity().finish()
                                 }
                             }
                         }
