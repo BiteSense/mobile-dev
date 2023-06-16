@@ -20,7 +20,7 @@ This repository is the code for developing BiteSense android applications as our
 If there are problems / questions in setting up or anything related to this repository, please contact:
 
 - A177DKX4009 - Muhammad Rifqy Yudhiestra Rachman - [linkedIn](https://www.linkedin.com/in/rifqyyr/)
-- Raihan ()
+- A040DSX1190 - Raihan Alghiffari [linkedIn](https://www.linkedin.com/in/raihan-alghiffari-066710211/)
 
 ## Screenshot
 
