@@ -18,7 +18,7 @@ class FavoriteFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val favoriteViewModel: FavoriteViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(

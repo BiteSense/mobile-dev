@@ -65,6 +65,20 @@
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
     <string name="change_title">Change %s</string>
+    <string name="download">Download</string>
+    <string name="text_qr_download">Use the BiteSense app to create QR code in your product and receive good food traceability</string>
+    <string name="my_qr_code">My QR Code</string>
+    <string name="expired_date">Expired Date</string>
+    <string name="date_exp">EXP: 04–09-23</string>
+    <string name="login_error_message">Login failed, please try again.</string>
+    <string name="generate_error_message">Generate failed, please try again.</string>
+    <string name="scanqr_error_message">Scan failed, please try again.</string>
+    <string name="login_success_message">Login success</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="et_password_error_message">Passwords must be at least 8 characters</string>
+    <string name="registration_error_message">Registration failed, please try again.</string>
+    <string name="registration_success">Registration success</string>
+    <string name="generate_succes">Generate QR success</string>
     <string name="permission_granted">Camera permission granted</string>
     <string name="permission_denied">Camera permission denied</string>
     <string name="take_picture_failed">Failed to take picture</string>
@@ -96,4 +110,9 @@
     <string name="fail_get_user_data">Cannot get user data</string>
     <string name="fail_get_user_health_condition">Cannot get user preference</string>
     <string name="fail_scan_product">Failed to scan product</string>
+    <string name="ex_komposisi">ex:Sugar,soda,natrium</string>
+    <string name="ex_name_product">ex:Cola,Teh gelas</string>
+    <string name="et_email_error_message">Email address is not valid</string>
+    <string name="et_username_error_message">Username must be filled</string>
+    <string name="tanggal_produksi">Tanggal Produksi</string>
 </resources>

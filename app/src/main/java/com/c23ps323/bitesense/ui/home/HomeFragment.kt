@@ -22,7 +22,7 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(

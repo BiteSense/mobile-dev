@@ -1,5 +1,6 @@
 package com.c23ps323.bitesense.utils
 
+import android.animation.ObjectAnimator
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
@@ -7,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.view.View
 import com.c23ps323.bitesense.R
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -69,4 +71,11 @@ fun reduceFileImage(file: File): File {
     } while (streamLength > MAXIMAL_SIZE)
     bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
+}
+
+fun View.animateVisibility(isVisible: Boolean, duration: Long = 400) {
+    ObjectAnimator
+        .ofFloat(this, View.ALPHA, if (isVisible) 1f else 0f)
+        .setDuration(duration)
+        .start()
 }

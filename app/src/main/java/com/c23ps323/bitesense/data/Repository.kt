@@ -1,23 +1,32 @@
 package com.c23ps323.bitesense.data
 
+import LoginResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.c23ps323.bitesense.data.local.AuthPreferencesDataSource
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
+import com.c23ps323.bitesense.data.remote.response.*
+import com.c23ps323.bitesense.data.remote.retrofit.ApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
-import com.c23ps323.bitesense.data.remote.response.LoginResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
-import com.c23ps323.bitesense.data.remote.retrofit.ApiService
 import com.c23ps323.bitesense.utils.UserPreference
 import com.google.gson.JsonElement
 import okhttp3.MultipartBody
+import retrofit2.Response
+
 
 class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao,
+    private val preferencesDataSource: AuthPreferencesDataSource,
     private val userPreference: UserPreference
 ) {
     fun updatePreference(preference: JsonElement): LiveData<Result<UploadProductResponse>> =
@@ -30,37 +39,6 @@ class Repository private constructor(
                 emit(Result.Error(e.message.toString()))
             }
         }
-
-    fun register(
-        username: String, email: String, password: String, repassword: String
-    ): LiveData<Result<UploadProductResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.register(username, email, password, repassword)
-            emit(Result.Success(response))
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
-    fun login(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.login(email, password)
-            val headerResponse = response.headers()
-            val headerMapList: Map<String, List<String>> = headerResponse.toMultimap()
-            val allCookies: List<String> = headerMapList["set-cookie"]!!
-            var cookieVal = ""
-            for (i in 1 until allCookies.size) {
-                val newCookie = allCookies[i].replace("\\s*Path=/\\s*".toRegex(), "")
-                cookieVal += newCookie
-            }
-            userPreference.saveUserCookie(cookieVal)
-            emit(Result.Success(response.body()!!))
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
-        }
-    }
 
     fun getScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
@@ -223,15 +201,81 @@ class Repository private constructor(
         emitSource(localData)
     }
 
+
+    suspend fun userLogin(email: String, password: String): Flow<kotlin.Result<Response<LoginResponse>>> = flow {
+        try {
+            val response = apiService.userLogin(email, password)
+            emit(kotlin.Result.success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+
+    suspend fun userRegister(
+        name: String,
+        email: String,
+        password: String,
+        repassword: String,
+    ): Flow<kotlin.Result<RegisterResponse>> = flow {
+        try {
+            val response = apiService.userRegister(email, password,repassword,name)
+            emit(kotlin.Result.success(response))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun saveAuthToken(token: String) {
+        preferencesDataSource.saveAuthToken(token)
+    }
+
+    suspend fun scanQR(
+        id_produk : Int
+    ):Flow<kotlin.Result<ScanQRResponse>> = flow{
+        try {
+            val response = apiService.scanQR(id_produk)
+            emit(kotlin.Result.success(response))
+        }catch (e : Exception){
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+
+    }
+
+    suspend fun createQrCode(
+        nama_produk : String,
+        komposisi_produk : String,
+        expired : String,
+        tgl_produksi : String
+    ) : Flow<kotlin.Result<GenerateQrCode>> = flow{
+        try {
+            val response = apiService.createQrCode(nama_produk,komposisi_produk,expired,tgl_produksi)
+            emit(kotlin.Result.success(response))
+        }catch (e : Exception){
+            e.printStackTrace()
+            emit(kotlin.Result.failure(e))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
+
+
+    fun getAuthToken(): Flow<String?> = preferencesDataSource.getAuthToken()
+
     companion object {
         @Volatile
         private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
             productDao: ProductDao,
+            preferencesDataSource: AuthPreferencesDataSource,
             userPreference: UserPreference,
-        ): Repository = instance ?: synchronized(this) {
-            instance ?: Repository(apiService, productDao, userPreference)
-        }.also { instance = it }
+        ): Repository =
+            instance ?: synchronized(this) {
+                instance ?: Repository(apiService, productDao, preferencesDataSource, userPreference)
+            }.also { instance = it }
     }
 }

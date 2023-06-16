@@ -28,7 +28,7 @@ class PreferenceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPreferenceBinding
 
     private val preferenceViewModel: PreferenceViewModel by viewModels {
-        ViewModelFactory(this)
+        ViewModelFactory.getInstance(this)
     }
     private val dataKondisi = mutableListOf<String>()
     private val dataPenyakit = mutableListOf<String>()

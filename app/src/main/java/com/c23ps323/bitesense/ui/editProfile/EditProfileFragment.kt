@@ -3,7 +3,9 @@ package com.c23ps323.bitesense.ui.editProfile
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.DigitsKeyListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +28,7 @@ class EditProfileFragment : Fragment() {
     private var title: String? = null
     private var profileValue: String? = null
     private val editProfileViewModel: EditProfileViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(
@@ -73,6 +75,13 @@ class EditProfileFragment : Fragment() {
             btnBack.setOnClickListener {
                 parentFragmentManager.popBackStack()
                 hideBottomNav(false)
+            }
+            if (title == getString(R.string.phone_number_text)) {
+                if (profileValue == null) {
+                    etProfile.setText("")
+                }
+                etProfile.inputType = InputType.TYPE_CLASS_NUMBER
+                etProfile.keyListener = DigitsKeyListener.getInstance("0123456789:")
             }
             btnSubmit.setOnClickListener {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -221,6 +230,6 @@ class EditProfileFragment : Fragment() {
         const val EXTRA_TITLE = "extra_title"
         const val EXTRA_VALUE = "extra_value"
         private const val USERNAME = "Username"
-        private const val EMAIL = "email"
+        private const val EMAIL = "Email"
     }
 }

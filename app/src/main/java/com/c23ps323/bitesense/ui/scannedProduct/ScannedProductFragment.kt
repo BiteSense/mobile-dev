@@ -27,7 +27,7 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentScannedProductBinding? = null
     private val binding get() = _binding!!
     private val scannedProductViewModel: ScannedProductViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
 
     override fun onCreateView(

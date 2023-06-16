@@ -1,6 +1,7 @@
 package com.c23ps323.bitesense.ui.scanqr
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -13,6 +14,7 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.c23ps323.bitesense.databinding.ActivityScannerQractivityBinding
+import com.c23ps323.bitesense.ui.detailqr.DetailQrActivity
 
 class ScannerQRActivity : AppCompatActivity() {
 
@@ -48,6 +50,11 @@ class ScannerQRActivity : AppCompatActivity() {
         codeScanner.isFlashEnabled = true
 
         codeScanner.decodeCallback = DecodeCallback { hasil ->
+            Intent(this@ScannerQRActivity, DetailQrActivity::class.java).also { intent ->
+                intent.putExtra(DetailQrActivity.EXTRA_ID_PRODUCT, hasil.toString())
+                startActivity(intent)
+                finish()
+            }
             Toast.makeText(this, "Scan result ${hasil.text}", Toast.LENGTH_SHORT).show()
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS

@@ -15,4 +15,11 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
             repository.deleteAllData()
         }
     }
+
+    fun saveAuthToken(token: String) {
+        viewModelScope.launch {
+            repository.saveAuthToken(token)
+        }
+    }
+
 }

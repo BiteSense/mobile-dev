@@ -22,12 +22,13 @@ import com.c23ps323.bitesense.utils.UserPreference
 import com.c23ps323.bitesense.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
+
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels {
-        ViewModelFactory(requireContext())
+        ViewModelFactory.getInstance(requireContext())
     }
     private lateinit var userPreference: UserPreference
     private val userHealthConditions = mutableListOf<String>()
@@ -46,6 +47,7 @@ class ProfileFragment : Fragment() {
         userPreference = UserPreference(requireContext())
 
         binding.btnLogout.setOnClickListener {
+            profileViewModel.saveAuthToken("")
             userPreference.removeUserCookie()
             profileViewModel.deleteAllData()
             Toast.makeText(

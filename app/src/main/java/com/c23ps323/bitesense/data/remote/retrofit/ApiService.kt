@@ -1,8 +1,11 @@
 package com.c23ps323.bitesense.data.remote.retrofit
 
+
+import LoginResponse
+import com.c23ps323.bitesense.data.remote.response.*
+import retrofit2.http.*
 import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
-import com.c23ps323.bitesense.data.remote.response.LoginResponse
 import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
@@ -22,22 +25,6 @@ interface ApiService {
     suspend fun updatePreference(
         @Body preferences: JsonElement
     ): UploadProductResponse
-
-    @FormUrlEncoded
-    @POST("users/register")
-    suspend fun register(
-        @Field("username") username: String,
-        @Field("email") email: String,
-        @Field("password") password: String,
-        @Field("repassword") repassword: String
-    ): UploadProductResponse
-
-    @FormUrlEncoded
-    @POST("users/login")
-    suspend fun login(
-        @Field("email") email: String,
-        @Field("password") password: String
-    ): Response<LoginResponse>
 
     @GET("products/scan")
     suspend fun getScannedProducts(): ProductResponse
@@ -74,4 +61,34 @@ interface ApiService {
 
     @GET("products/all")
     suspend fun getAllProduct(): ProductResponse
+    @FormUrlEncoded
+    @POST("qrcode/inputProduct")
+    suspend fun createQrCode(
+        @Field("nama_produk") nama_produk : String,
+        @Field("komposisi_produk") komposisi_produk : String,
+        @Field("expired") expired : String,
+        @Field("tgl_produksi") tgl_produksi : String,
+    ) : GenerateQrCode
+
+    @FormUrlEncoded
+    @POST("users/login")
+    suspend fun userLogin(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Response<LoginResponse>
+
+    @FormUrlEncoded
+    @POST("users/register")
+    suspend fun userRegister(
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("repassword") repassword : String,
+        @Field("username") name: String,
+    ): RegisterResponse
+
+    @FormUrlEncoded
+    @POST("qrcode/scanProduct")
+    suspend fun scanQR(
+        @Field("id_produk") id_produk : Int
+    ) : ScanQRResponse
 }
