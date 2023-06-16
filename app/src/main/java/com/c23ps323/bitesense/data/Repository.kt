@@ -29,6 +29,16 @@ class Repository private constructor(
     private val preferencesDataSource: AuthPreferencesDataSource,
     private val userPreference: UserPreference
 ) {
+    fun getDetailProduct(id: String): LiveData<Result<DetailProdukResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getDetailProduct(id)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun updatePreference(preference: JsonElement): LiveData<Result<UploadProductResponse>> =
         liveData {
             emit(Result.Loading)

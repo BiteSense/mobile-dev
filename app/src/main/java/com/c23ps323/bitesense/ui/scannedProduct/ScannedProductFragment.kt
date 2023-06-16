@@ -120,6 +120,7 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
 
     override fun onItemClick(id: String) {
         val intent = Intent(requireContext(), DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_ID, id)
         startActivity(intent)
     }
 

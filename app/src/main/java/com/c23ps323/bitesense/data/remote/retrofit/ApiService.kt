@@ -21,6 +21,11 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface ApiService {
+    @GET("products/detail/{id}")
+    suspend fun getDetailProduct(
+        @Path("id") id: String
+    ): DetailProdukResponse
+
     @POST("users/preference/update")
     suspend fun updatePreference(
         @Body preferences: JsonElement

@@ -9,6 +9,7 @@ import com.c23ps323.bitesense.data.Repository
 import com.c23ps323.bitesense.di.Injection
 import com.c23ps323.bitesense.ui.auth.login.LoginViewModel
 import com.c23ps323.bitesense.ui.auth.register.RegisterViewModel
+import com.c23ps323.bitesense.ui.detail.DetailViewModel
 import com.c23ps323.bitesense.ui.detailqr.DetailQrViewModel
 import com.c23ps323.bitesense.ui.editProfile.EditProfileViewModel
 import com.c23ps323.bitesense.ui.favorite.FavoriteViewModel
@@ -89,7 +90,9 @@ class ViewModelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(PreferenceViewModel::class.java) -> {
                 PreferenceViewModel(repository) as T
             }
-
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
+                DetailViewModel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
