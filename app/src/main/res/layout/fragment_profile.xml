@@ -9,6 +9,7 @@
     tools:context=".ui.favorite.FavoriteFragment">
 
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -31,7 +32,7 @@
             android:layout_height="120dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
-            android:src="@drawable/chris"
+            android:src="@drawable/default_profile"
             tools:src="@tools:sample/avatars" />
 
         <TableLayout
@@ -62,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:gravity="end"
-                        android:text="Christopher Colombus"
+                        android:text="@string/user"
                         android:textColor="@color/mainTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:gravity="end"
-                        android:text="christophercol@gmail.com"
+                        android:text="@string/sample_email"
                         android:textColor="@color/mainTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +132,118 @@
                 android:layout_height="1dp"
                 android:background="@color/primaryColor" />
 
+            <TableRow
+                android:id="@+id/row_phone"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingVertical="12dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/round_phone_24"
+                    app:tint="@color/mainTextColor" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:gravity="end"
+                        android:text="@string/sample_number"
+                        android:textColor="@color/mainTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/round_keyboard_arrow_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/mainTextColor" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primaryColor" />
+
+            <TableRow
+                android:id="@+id/row_health"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingVertical="12dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/round_medical_services_24"
+                    app:tint="@color/mainTextColor" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_health"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:gravity="start"
+                        android:singleLine="true"
+                        android:text="@string/allergy"
+                        android:textColor="@color/mainTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/round_keyboard_arrow_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/mainTextColor" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primaryColor" />
+
         </TableLayout>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="46dp"
+            android:text="@string/logout"
+            android:textColor="@color/white"
+            app:chipBackgroundColor="@color/dangerColor"
+            app:chipEndPadding="8dp"
+            app:chipIcon="@drawable/round_exit_to_app_24"
+            app:chipIconSize="18dp"
+            app:iconStartPadding="8dp" />
     </LinearLayout>
 
     <ProgressBar

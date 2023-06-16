@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.preference.PreferenceActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/text_preference"
+        android:textColor="@color/mainTextColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/information_safe"
+        android:textColor="@color/mainTextColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/allergy"
+        android:textColor="@color/mainTextColor"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+    <CheckBox
+        android:id="@+id/cb_peanut"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/peanut"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintEnd_toStartOf="@id/cb_egg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <CheckBox
+        android:id="@+id/cb_egg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/egg"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_peanut"
+        app:layout_constraintEnd_toStartOf="@id/cb_soy"
+        app:layout_constraintStart_toEndOf="@+id/cb_peanut"
+        app:layout_constraintTop_toTopOf="@+id/cb_peanut" />
+
+    <CheckBox
+        android:id="@+id/cb_soy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/soy"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_egg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_egg"
+        app:layout_constraintTop_toTopOf="@+id/cb_egg"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <CheckBox
+        android:id="@+id/cb_fish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/fish"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@id/cb_milk"
+        app:layout_constraintEnd_toStartOf="@id/cb_wheat"
+        app:layout_constraintStart_toEndOf="@+id/cb_milk"
+        app:layout_constraintTop_toTopOf="@id/cb_milk" />
+
+    <CheckBox
+        android:id="@+id/cb_wheat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/wheat"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_fish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_fish"
+        app:layout_constraintTop_toTopOf="@+id/cb_fish" />
+
+    <CheckBox
+        android:id="@+id/cb_shellfish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/shellfish"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cb_milk" />
+
+    <CheckBox
+        android:id="@+id/cb_tree_nut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/tree_nut"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_shellfish"
+        app:layout_constraintStart_toEndOf="@+id/cb_shellfish"
+        app:layout_constraintTop_toTopOf="@+id/cb_shellfish" />
+
+    <CheckBox
+        android:id="@+id/cb_milk"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/milk"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintEnd_toStartOf="@id/cb_fish"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_peanut" />
+
+    <TextView
+        android:id="@+id/tv_food_intolerance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/food_intolerance"
+        android:textColor="@color/mainTextColor"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_shellfish" />
+
+
+    <CheckBox
+        android:id="@+id/cb_dairy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/dairy"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintEnd_toStartOf="@id/cb_gluten"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_food_intolerance" />
+
+    <CheckBox
+        android:id="@+id/cb_gluten"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/gluten"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_dairy"
+        app:layout_constraintEnd_toStartOf="@id/cb_caffeine"
+        app:layout_constraintStart_toEndOf="@+id/cb_dairy"
+        app:layout_constraintTop_toTopOf="@+id/cb_dairy" />
+
+    <CheckBox
+        android:id="@+id/cb_caffeine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/caffeine"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_gluten"
+        app:layout_constraintEnd_toStartOf="@id/cb_msg"
+        app:layout_constraintStart_toEndOf="@+id/cb_gluten"
+        app:layout_constraintTop_toTopOf="@+id/cb_gluten" />
+
+    <CheckBox
+        android:id="@+id/cb_msg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/msg"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_caffeine"
+        app:layout_constraintEnd_toStartOf="@id/cb_ragi"
+        app:layout_constraintStart_toEndOf="@+id/cb_caffeine"
+        app:layout_constraintTop_toTopOf="@+id/cb_caffeine" />
+
+    <CheckBox
+        android:id="@+id/cb_ragi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/ragi"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_msg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_msg"
+        app:layout_constraintTop_toTopOf="@+id/cb_msg" />
+
+    <CheckBox
+        android:id="@+id/cb_fruktosa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/fruktosa"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintEnd_toStartOf="@id/cb_biji"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_dairy" />
+
+    <CheckBox
+        android:id="@+id/cb_biji"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/grains"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_fruktosa"
+        app:layout_constraintEnd_toStartOf="@id/cb_salicylates"
+        app:layout_constraintStart_toEndOf="@+id/cb_fruktosa"
+        app:layout_constraintTop_toTopOf="@+id/cb_fruktosa" />
+
+    <CheckBox
+        android:id="@+id/cb_salicylates"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/salicylates"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_biji"
+        app:layout_constraintEnd_toStartOf="@id/cb_food_color"
+        app:layout_constraintStart_toEndOf="@+id/cb_biji"
+        app:layout_constraintTop_toTopOf="@+id/cb_biji" />
+
+    <CheckBox
+        android:id="@+id/cb_food_color"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/food_coloring"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_salicylates"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_salicylates"
+        app:layout_constraintTop_toTopOf="@+id/cb_salicylates" />
+
+
+    <TextView
+        android:id="@+id/tv_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/other"
+        android:textColor="@color/mainTextColor"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_fruktosa" />
+
+
+    <CheckBox
+        android:id="@+id/cb_diabetes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/diabetes"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintEnd_toStartOf="@id/cb_hypertension"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_other" />
+
+    <CheckBox
+        android:id="@+id/cb_hypertension"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/hypertension"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_diabetes"
+        app:layout_constraintEnd_toStartOf="@id/cb_pregnant"
+        app:layout_constraintStart_toEndOf="@+id/cb_diabetes"
+        app:layout_constraintTop_toTopOf="@+id/cb_diabetes" />
+
+    <CheckBox
+        android:id="@+id/cb_pregnant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/pregnant"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_hypertension"
+        app:layout_constraintEnd_toStartOf="@id/cb_obesity"
+        app:layout_constraintStart_toEndOf="@+id/cb_hypertension"
+        app:layout_constraintTop_toTopOf="@+id/cb_hypertension" />
+
+    <CheckBox
+        android:id="@+id/cb_obesity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/obesity"
+        android:textAlignment="center"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_pregnant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_pregnant"
+        app:layout_constraintTop_toTopOf="@+id/cb_pregnant" />
+
+    <CheckBox
+        android:id="@+id/cb_gerd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/gerd_maag"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_diabetes" />
+
+    <CheckBox
+        android:id="@+id/cb_stroke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/stroke"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_uric_acid"
+        app:layout_constraintStart_toEndOf="@+id/cb_uric_acid"
+        app:layout_constraintTop_toTopOf="@+id/cb_uric_acid" />
+
+    <CheckBox
+        android:id="@+id/cb_uric_acid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_radio_selector"
+        android:button="@color/transparent"
+        android:text="@string/uric_acid"
+        android:textColor="@drawable/custom_radio_text"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_gerd"
+        app:layout_constraintStart_toEndOf="@+id/cb_gerd"
+        app:layout_constraintTop_toTopOf="@+id/cb_gerd" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="342dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/submit"
+        android:textColor="@color/mainTextColor"
+        app:backgroundTint="@color/primaryColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

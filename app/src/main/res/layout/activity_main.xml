@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <View
+        android:id="@+id/transparentBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="invisible"
+        />
+
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:paddingBottom="40dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
+
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
@@ -36,16 +46,74 @@
                 app:menu="@menu/bottom_nav_menu" />
         </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/take_picture"
-            android:src="@drawable/baseline_camera_alt_24"
-            app:backgroundTint="#FDC500"
-            app:layout_anchor="@id/bottom_appbar"
-            app:tint="@color/white" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="@string/take_picture"
+                android:src="@drawable/ic_baseline_add_24"
+                app:backgroundTint="#FDC500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tint="@color/white" />
+
+            <Button
+                android:id="@+id/btn_scan_product"
+                android:layout_width="135dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/primaryColor"
+                android:textSize="11sp"
+                android:text="@string/scan_product"
+                android:visibility="invisible"
+                app:cornerRadius="17dp"
+                app:layout_constraintBottom_toTopOf="@+id/fab"
+                app:layout_constraintEnd_toEndOf="@+id/fab"
+                app:layout_constraintStart_toStartOf="@+id/fab" />
+
+            <Button
+
+                android:id="@+id/btn_scan_qr_code"
+                android:layout_width="125dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/primaryColor"
+                android:text="@string/scan_qr_code"
+                android:textSize="11sp"
+                android:visibility="invisible"
+                app:cornerRadius="17dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_scan_product"
+                app:layout_constraintEnd_toEndOf="@+id/btn_scan_product"
+                app:layout_constraintStart_toStartOf="@+id/btn_scan_product" />
+
+            <Button
+                android:id="@+id/btn_generete_qr"
+                android:layout_width="115dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/primaryColor"
+                android:text="@string/generete_qr"
+                android:textSize="11sp"
+                android:visibility="invisible"
+                app:cornerRadius="17dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_scan_qr_code"
+                app:layout_constraintEnd_toEndOf="@+id/btn_scan_qr_code"
+                app:layout_constraintStart_toStartOf="@+id/btn_scan_qr_code" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </RelativeLayout>

@@ -3,7 +3,22 @@
     <style name="Base.Theme.BiteSense" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+     <item name="android:statusBarColor" >@color/primaryColor</item>
     </style>
 
     <style name="Theme.BiteSense" parent="Base.Theme.BiteSense" />
+
+<!--    <style name="TextAppearance.AppTheme.TextInputLayout.HintTextAlt" parent="TextAppearance.MaterialComponents.Subtitle2">-->
+<!--        <item name="android:textColor">@color/primaryColor</item>-->
+<!--    </style>-->
+<!--    <style name="Widget.AppTheme.TextInputLayoutList" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">-->
+<!--        <item name="hintTextAppearance">@style/TextAppearance.AppTheme.TextInputLayout.HintTextAlt</item>-->
+<!--        <item name="boxStrokeColor">@color/primaryColor</item>-->
+<!--        <item name="boxCornerRadiusBottomEnd">5dp</item>-->
+<!--        <item name="boxCornerRadiusBottomStart">5dp</item>-->
+<!--        <item name="boxCornerRadiusTopEnd">5dp</item>-->
+<!--        <item name="boxCornerRadiusTopStart">5dp</item>-->
+<!--        <item name="android:layout_margin">5dp</item>-->
+<!--        <item name="android:textColorHint">@color/mainTextColor</item>-->
+<!--    </style>-->
 </resources>

@@ -2,21 +2,29 @@ package com.c23ps323.bitesense.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.c23ps323.bitesense.R
+import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.ProductItemCardBinding
-import com.c23ps323.bitesense.entities.Product
 
-class ProductAdapter(private val listProduct: List<Product>) :
-    ListAdapter<Product, ProductAdapter.ViewHolder>(
+class ProductAdapter(
+    private val listener: OnItemClickListener,
+    private val onFavoriteClick: (ProductEntity) -> Unit
+) :
+    ListAdapter<ProductEntity, ProductAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
-    class ViewHolder(private val binding: ProductItemCardBinding) :
+    interface OnItemClickListener {
+        fun onItemClick(id: String)
+    }
+
+    class ViewHolder(val binding: ProductItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindProduct(product: Product) {
+        fun bindProduct(product: ProductEntity) {
             Glide.with(itemView)
                 .load(product.photoUrl)
                 .into(binding.ivProduct)
@@ -26,19 +34,34 @@ class ProductAdapter(private val listProduct: List<Product>) :
                 if (product.isFavorite) ivFavorite.setImageResource(R.drawable.round_favorite_24) else ivFavorite.setImageResource(
                     R.drawable.round_favorite_border_24
                 )
-                ivFavorite.setOnClickListener {
-                    product.isFavorite = !product.isFavorite
-                    if (product.isFavorite) {
-                        binding.ivFavorite.setImageResource(R.drawable.round_favorite_24)
-                    } else {
-                        binding.ivFavorite.setImageResource(R.drawable.round_favorite_border_24)
+                when (product.warningIndicator) {
+                    0 -> binding.warningIndicator.apply {
+                        setText(R.string.safe)
+                        chipBackgroundColor =
+                            ContextCompat.getColorStateList(context, R.color.safeColor)
+                        isClickable = false
                     }
-                }
-                when(product.warningIndicator) {
-                    0 -> binding.ivIndicator.setImageResource(R.drawable.danger_indicator)
-                    1 -> binding.ivIndicator.setImageResource(R.drawable.warning_indicator)
-                    2 -> binding.ivIndicator.setImageResource(R.drawable.safe_indicator)
-                    else -> binding.ivIndicator.setImageResource(R.drawable.warning_indicator)
+
+                    1 -> binding.warningIndicator.apply {
+                        setText(R.string.warning)
+                        chipBackgroundColor =
+                            ContextCompat.getColorStateList(context, R.color.warningColor)
+                        isClickable = false
+                    }
+
+                    2 -> binding.warningIndicator.apply {
+                        setText(R.string.danger)
+                        chipBackgroundColor =
+                            ContextCompat.getColorStateList(context, R.color.dangerColor)
+                        isClickable = false
+                    }
+
+                    else -> binding.warningIndicator.apply {
+                        setText(R.string.warning)
+                        chipBackgroundColor =
+                            ContextCompat.getColorStateList(context, R.color.warningColor)
+                        isClickable = false
+                    }
                 }
             }
         }
@@ -50,19 +73,45 @@ class ProductAdapter(private val listProduct: List<Product>) :
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listProduct.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindProduct(listProduct[position])
+        val products = getItem(position)
+        holder.bindProduct(products)
+
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(products.id)
+        }
+        val ivFavorite = holder.binding.ivFavorite
+        if (products.isFavorite) {
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_24
+                )
+            )
+        } else {
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_border_24
+                )
+            )
+        }
+        ivFavorite.setOnClickListener {
+            products.isFavorite = !products.isFavorite
+            onFavoriteClick(products)
+        }
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Product>() {
-            override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductEntity>() {
+            override fun areItemsTheSame(oldItem: ProductEntity, newItem: ProductEntity): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            override fun areContentsTheSame(
+                oldItem: ProductEntity,
+                newItem: ProductEntity
+            ): Boolean {
                 return oldItem.id == newItem.id
             }
         }

@@ -1,20 +1,25 @@
 package com.c23ps323.bitesense.ui.favorite
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps323.bitesense.adapter.ProductAdapter
+import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentFavoriteBinding
-import com.c23ps323.bitesense.entities.Product
-import com.c23ps323.bitesense.entities.ProductData
+import com.c23ps323.bitesense.ui.detail.DetailActivity
+import com.c23ps323.bitesense.utils.ViewModelFactory
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
-    private var list: ArrayList<Product> = arrayListOf()
+    private val favoriteViewModel: FavoriteViewModel by viewModels {
+        ViewModelFactory.getInstance(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,17 +32,37 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list.addAll(ProductData.favoriteListData)
-
-        binding.apply {
-            rvFavoriteItems.adapter = ProductAdapter(list)
-            rvFavoriteItems.layoutManager = LinearLayoutManager(requireContext())
-            rvFavoriteItems.setHasFixedSize(true)
+        favoriteViewModel.getFavoriteProducts.observe(viewLifecycleOwner) { favoriteProducts ->
+            setupRecyclerView(favoriteProducts)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onItemClick(id: String) {
+        val intent = Intent(requireContext(), DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_ID, id)
+        startActivity(intent)
+    }
+
+    private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        val productAdapter = ProductAdapter(this) { product ->
+            if (product.isFavorite) {
+                favoriteViewModel.saveProduct(product)
+            } else {
+                favoriteViewModel.deleteProduct(product)
+            }
+        }
+        productAdapter.submitList(products)
+        binding.apply {
+            rvFavoriteItems.layoutManager = linearLayoutManager
+            rvFavoriteItems.setHasFixedSize(true)
+            rvFavoriteItems.adapter = productAdapter
+        }
     }
 }

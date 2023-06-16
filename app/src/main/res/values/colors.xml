@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mainTextColor">#FF263238</color>
     <color name="primaryColor">#FFFDC500</color>
     <color name="secondaryTextColor">#FF9FA3AB</color>
-    <color name="dangerColor">#FFD21312</color>
+    <color name="greyColor">#F3F3F3</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/primaryColor</color>
+
+    <color name="dangerColor">#FFFF0000</color>
+    <color name="safeColor">#FF1DB954</color>
+    <color name="warningColor">#FFFDAC00</color>
 </resources>
+

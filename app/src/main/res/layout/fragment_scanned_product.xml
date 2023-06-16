@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="16dp"
+    tools:context=".ui.scannedProduct.ScannedProductFragment">
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/scanned_products"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/mainTextColor"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            tools:text="Last Scanned Items" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_scanned_products"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/product_item_card"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
