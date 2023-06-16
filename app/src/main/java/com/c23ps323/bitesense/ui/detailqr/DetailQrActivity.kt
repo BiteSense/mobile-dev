@@ -42,7 +42,7 @@ class DetailQrActivity : AppCompatActivity() {
             if (scanJob.isActive) scanJob.cancel()
 
             scanJob = launch {
-                detailQrViewModel.scanQR(666063169).collect { result ->
+                detailQrViewModel.scanQR(id_product).collect { result ->
                     result.onSuccess { dataProduk ->
                         dataProduk.data.let {
                             binding.tvProductName.text = it[0].nama_produk
