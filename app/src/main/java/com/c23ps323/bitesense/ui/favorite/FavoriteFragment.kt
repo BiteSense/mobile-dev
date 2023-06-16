@@ -5,10 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import android.widget.Toast
-
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +48,8 @@ class FavoriteFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
     private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         val productAdapter = ProductAdapter(this) { product ->
             if (product.isFavorite) {
                 favoriteViewModel.saveProduct(product)
@@ -60,10 +58,10 @@ class FavoriteFragment : Fragment(), ProductAdapter.OnItemClickListener {
             }
         }
         productAdapter.submitList(products)
-        binding.rvFavoriteItems.adapter = productAdapter
         binding.apply {
-            rvFavoriteItems.layoutManager = LinearLayoutManager(requireContext())
+            rvFavoriteItems.layoutManager = linearLayoutManager
             rvFavoriteItems.setHasFixedSize(true)
+            rvFavoriteItems.adapter = productAdapter
         }
     }
 }

@@ -44,29 +44,11 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
             ).show()
         }
 
-        homeViewModel.user.observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        Glide.with(requireContext())
-                            .load(result.data.data?.result?.fotoUser)
-                            .into(binding.ivProfile)
-                        binding.tvName.text = getString(R.string.greet_user, result.data.data?.result?.username)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
+        setupUserData()
+        setupProductData()
+    }
 
+    private fun setupProductData() {
         homeViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
@@ -79,7 +61,33 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         Toast.makeText(
                             context,
-                            result.error,
+                            getString(R.string.general_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupUserData() {
+        homeViewModel.user.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        Glide.with(requireContext())
+                            .load(result.data.data?.result?.fotoUser)
+                            .into(binding.ivProfile)
+                        binding.tvName.text =
+                            getString(R.string.greet_user, result.data.data?.result?.username)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.general_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -113,6 +121,8 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
     private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         val productAdapter = ProductAdapter(this) { product ->
             if (product.isFavorite) {
                 homeViewModel.saveProduct(product)
@@ -122,9 +132,9 @@ class HomeFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
         productAdapter.submitList(products)
         binding.apply {
-            rvLastScannedItems.adapter = productAdapter
-            rvLastScannedItems.layoutManager = LinearLayoutManager(requireContext())
+            rvLastScannedItems.layoutManager = linearLayoutManager
             rvLastScannedItems.setHasFixedSize(true)
+            rvLastScannedItems.adapter = productAdapter
         }
     }
 }

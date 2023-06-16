@@ -15,9 +15,6 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.c23ps323.bitesense.databinding.ActivityScannerQractivityBinding
 import com.c23ps323.bitesense.ui.detailqr.DetailQrActivity
-import com.c23ps323.bitesense.ui.detailqr.DetailQrActivity.Companion.EXTRA_ID_PRODUCT
-import com.c23ps323.bitesense.ui.detailqr.DetailQrViewModel
-import com.c23ps323.bitesense.ui.generateqr.GenerateQRActivity
 
 class ScannerQRActivity : AppCompatActivity() {
 
@@ -54,7 +51,7 @@ class ScannerQRActivity : AppCompatActivity() {
 
         codeScanner.decodeCallback = DecodeCallback { hasil ->
             Intent(this@ScannerQRActivity, DetailQrActivity::class.java).also { intent ->
-                intent.putExtra(DetailQrActivity.EXTRA_ID_PRODUCT, hasil.toString() )
+                intent.putExtra(DetailQrActivity.EXTRA_ID_PRODUCT, hasil.toString())
                 startActivity(intent)
                 finish()
             }

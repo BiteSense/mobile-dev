@@ -1,10 +1,9 @@
 package com.c23ps323.bitesense.ui.detailqr
 
-import android.os.Binder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.ActivityDetailQrBinding
@@ -15,12 +14,13 @@ import kotlinx.coroutines.launch
 
 class DetailQrActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityDetailQrBinding
-    private var scanJob : Job = Job()
+    private lateinit var binding: ActivityDetailQrBinding
+    private var scanJob: Job = Job()
 
-    private val detailQrViewModel :DetailQrViewModel by viewModels {
+    private val detailQrViewModel: DetailQrViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailQrBinding.inflate(layoutInflater)
@@ -33,28 +33,23 @@ class DetailQrActivity : AppCompatActivity() {
         handleScanQr(id_produk!!.toInt())
 
 
-
-
     }
 
-    private fun handleScanQr(id_product : Int) {
+    @Suppress("DEPRECATION")
+    private fun handleScanQr(id_product: Int) {
 
         lifecycleScope.launchWhenResumed {
             if (scanJob.isActive) scanJob.cancel()
 
             scanJob = launch {
-                detailQrViewModel.scanQR(666063169).collect{result ->
-                    result.onSuccess {dataProduk ->
-                        Log.d("Data Product",dataProduk.toString())
+                detailQrViewModel.scanQR(666063169).collect { result ->
+                    result.onSuccess { dataProduk ->
                         dataProduk.data.let {
                             binding.tvProductName.text = it[0].nama_produk
                             binding.tvComposition.text = it[0].komposisi_produk
                             binding.tvExp.text = it[0].expired
                             binding.tvTglProduksi.text = it[0].tgl_produksi
-
                         }
-
-
                     }
                     result.onFailure {
                         Snackbar.make(
@@ -63,16 +58,13 @@ class DetailQrActivity : AppCompatActivity() {
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
-
                 }
-
             }
-
-
         }
 
     }
-    companion object{
-       const val EXTRA_ID_PRODUCT = "EXTRA_ID_PRODUCT"
+
+    companion object {
+        const val EXTRA_ID_PRODUCT = "EXTRA_ID_PRODUCT"
     }
 }

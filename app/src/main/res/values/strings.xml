@@ -23,29 +23,29 @@
     <string name="sign_up">Sign up</string>
     <string name="already_have_account">already have account?</string>
     <string name="new_to_bitesense">new to BiteSense</string>
-    <string name="peanut">Peanut</string>
     <string name="text_preference">Please select the option below according to your health condition</string>
     <string name="information_safe">* the information that you provide will be safe and confidential</string>
     <string name="allergy">Allergy</string>
-    <string name="egg">Egg</string>
-    <string name="soy">Soy</string>
-    <string name="fish">Fish</string>
-    <string name="milk">Milk</string>
-    <string name="wheat">Wheat</string>
-    <string name="shellfish">Shellfish</string>
+    <string name="peanut">Alergi Kacang</string>
+    <string name="egg">Alergi Telur</string>
+    <string name="soy">Alergi Kedelai</string>
+    <string name="fish">Alergi Ikan</string>
+    <string name="milk">Alergi Susu</string>
+    <string name="wheat">Alergi Gandum</string>
+    <string name="shellfish">Alergi Shellfish</string>
     <string name="food_intolerance">Food Intolerance</string>
     <string name="dairy">Dairy</string>
     <string name="gluten">Gluten</string>
-    <string name="caffeine">Caffeine</string>
+    <string name="caffeine">Kafein</string>
     <string name="msg">MSG</string>
     <string name="diabetes">Diabetes</string>
-    <string name="pregnant">Pregnant</string>
+    <string name="pregnant">Hamil</string>
     <string name="other">Other</string>
-    <string name="hypertension">Hypertension</string>
+    <string name="hypertension">Hipertensi</string>
     <string name="submit">Submit</string>
     <string name="scan_product">Scan Product</string>
     <string name="scan_qr_code">Scan QR Code</string>
-    <string name="generete_qr">Generete QR</string>
+    <string name="generete_qr">Generate QR</string>
     <string name="generate_qr">Generate QR</string>
     <string name="danger">Danger</string>
     <string name="safe">Safe</string>
@@ -65,24 +65,20 @@
     <string name="scanned_products">Scanned Products</string>
     <string name="greet_user">Hello, %s</string>
     <string name="change_title">Change %s</string>
-
     <string name="download">Download</string>
     <string name="text_qr_download">Use the BiteSense app to create QR code in your product and receive good food traceability</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="expired_date">Expired Date</string>
-    <string name="date_exp">EXP: 04-09-23</string>
+    <string name="date_exp">EXP: 04–09-23</string>
     <string name="login_error_message">Login failed, please try again.</string>
     <string name="generate_error_message">Generate failed, please try again.</string>
     <string name="scanqr_error_message">Scan failed, please try again.</string>
-
     <string name="login_success_message">Login success</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="et_password_error_message">Passwords must be at least 8 characters</string>
     <string name="registration_error_message">Registration failed, please try again.</string>
     <string name="registration_success">Registration success</string>
     <string name="generate_succes">Generate QR success</string>
-
-
     <string name="permission_granted">Camera permission granted</string>
     <string name="permission_denied">Camera permission denied</string>
     <string name="take_picture_failed">Failed to take picture</string>
@@ -93,11 +89,30 @@
     <string name="sample_email">example@gmail.com</string>
     <string name="sample_number">+62 123456789</string>
     <string name="phone_number">+62 %s</string>
+    <string name="phone_number_text">Phone Number</string>
+    <string name="success_upload">Success Uploading</string>
+    <string name="obesity">Obesitas</string>
+    <string name="gerd_maag">Gerd(Maag)</string>
+    <string name="stroke">Stroke</string>
+    <string name="uric_acid">Asam Urat</string>
+    <string name="tree_nut">Alergi Kacang Pohon</string>
+    <string name="fruktosa">Fruktosa</string>
+    <string name="ragi">Ragi</string>
+    <string name="grains">Biji-Bijian</string>
+    <string name="salicylates">Salicylates</string>
+    <string name="food_coloring">Pewarna Makanan</string>
+    <string name="fill_it">Fill it First</string>
+    <string name="success_edit">Success Edit</string>
+    <string name="general_error">Something went wrong</string>
+    <string name="fill_preference">Please fill the preference</string>
+    <string name="upload_failed">Failed to upload</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="fail_get_user_data">Cannot get user data</string>
+    <string name="fail_get_user_health_condition">Cannot get user preference</string>
+    <string name="fail_scan_product">Failed to scan product</string>
     <string name="ex_komposisi">ex:Sugar,soda,natrium</string>
     <string name="ex_name_product">ex:Cola,Teh gelas</string>
     <string name="et_email_error_message">Email address is not valid</string>
     <string name="et_username_error_message">Username must be filled</string>
     <string name="tanggal_produksi">Tanggal Produksi</string>
-
-
 </resources>

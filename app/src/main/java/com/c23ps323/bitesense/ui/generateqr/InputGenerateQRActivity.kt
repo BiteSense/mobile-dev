@@ -2,11 +2,10 @@ package com.c23ps323.bitesense.ui.generateqr
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.databinding.ActivityInputGenerateQractivityBinding
@@ -16,18 +15,17 @@ import com.c23ps323.bitesense.utils.animateVisibility
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.log
+import java.util.Calendar
 
 class InputGenerateQRActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityInputGenerateQractivityBinding
+    private lateinit var binding: ActivityInputGenerateQractivityBinding
 
-    private var generateQrJob : Job = Job()
-    private val inputGenerateQrViewModel : InputGenerateQrViewModel by viewModels {
+    private var generateQrJob: Job = Job()
+    private val inputGenerateQrViewModel: InputGenerateQrViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInputGenerateQractivityBinding.inflate(layoutInflater)
@@ -37,6 +35,7 @@ class InputGenerateQRActivity : AppCompatActivity() {
 
     }
 
+    @Suppress("DEPRECATION")
     private fun setActions() {
         binding.btnBack.setOnClickListener {
             onBackPressed()
@@ -62,30 +61,35 @@ class InputGenerateQRActivity : AppCompatActivity() {
             if (generateQrJob.isActive) generateQrJob.cancel()
 
             generateQrJob = launch {
-                inputGenerateQrViewModel.createQrCode(name,komposisi_,expired,tgl_produksi).collect{result ->
-                    result.onSuccess {data ->
-                        Toast.makeText(this@InputGenerateQRActivity,
-                            getString(R.string.generate_succes),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        data.data?.let {data ->
-                            Intent(this@InputGenerateQRActivity,GenerateQRActivity::class.java).also {intent ->
-                                intent.putExtra(EXTRA_DATA,data )
-                                startActivity(intent)
-                                finish()
+                inputGenerateQrViewModel.createQrCode(name, komposisi_, expired, tgl_produksi)
+                    .collect { result ->
+                        result.onSuccess { data ->
+                            Toast.makeText(
+                                this@InputGenerateQRActivity,
+                                getString(R.string.generate_succes),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            data.data?.let { data ->
+                                Intent(
+                                    this@InputGenerateQRActivity,
+                                    GenerateQRActivity::class.java
+                                ).also { intent ->
+                                    intent.putExtra(EXTRA_DATA, data)
+                                    startActivity(intent)
+                                    finish()
+                                }
                             }
+
+                        }
+                        result.onFailure {
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.generate_error_message),
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
 
                     }
-                    result.onFailure {
-                        Snackbar.make(
-                            binding.root,
-                            getString(R.string.generate_error_message),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-
-                }
             }
         }
     }
@@ -110,39 +114,39 @@ class InputGenerateQRActivity : AppCompatActivity() {
         val year = myCalendar.get(Calendar.YEAR)
         val month = myCalendar.get(Calendar.MONTH)
         val day = myCalendar.get(Calendar.DAY_OF_MONTH)
-        val dpd = DatePickerDialog(this,DatePickerDialog.OnDateSetListener{ _, selectedYear,
-                                                                            selectedMonth,
-                                                                            selectedDayOfMonth ->
+        val dpd = DatePickerDialog(
+            this, { _, selectedYear,
+                    selectedMonth,
+                    selectedDayOfMonth ->
 
-            val selectedDate = "${selectedYear}-${selectedMonth+1}-$selectedDayOfMonth"
-            binding.tvDate2?.text = selectedDate
-
-        },
+                val selectedDate = "${selectedYear}-${selectedMonth + 1}-$selectedDayOfMonth"
+                binding.tvDate2.text = selectedDate
+            },
             year,
             month,
-            day)
+            day
+        )
         dpd.show()
     }
+
     private fun clickDatePicker() {
         val myCalendar = Calendar.getInstance()
         val year = myCalendar.get(Calendar.YEAR)
         val month = myCalendar.get(Calendar.MONTH)
         val day = myCalendar.get(Calendar.DAY_OF_MONTH)
-        val dpd = DatePickerDialog(this,DatePickerDialog.OnDateSetListener{ _, selectedYear,
-                                                                            selectedMonth,
-                                                                            selectedDayOfMonth ->
+        val dpd = DatePickerDialog(
+            this, DatePickerDialog.OnDateSetListener { _, selectedYear,
+                                                       selectedMonth,
+                                                       selectedDayOfMonth ->
 
-            val selectedDate = "${selectedYear}-${selectedMonth+1}-$selectedDayOfMonth"
-            binding.tvDate?.text = selectedDate
+                val selectedDate = "${selectedYear}-${selectedMonth + 1}-$selectedDayOfMonth"
+                binding.tvDate.text = selectedDate
 
-        },
+            },
             year,
             month,
-            day)
+            day
+        )
         dpd.show()
     }
-
-
 }
-
-

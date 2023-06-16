@@ -1,6 +1,5 @@
 package com.c23ps323.bitesense.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -37,9 +36,9 @@ class ProductAdapter(
                 )
                 when (product.warningIndicator) {
                     0 -> binding.warningIndicator.apply {
-                        setText(R.string.danger)
+                        setText(R.string.safe)
                         chipBackgroundColor =
-                            ContextCompat.getColorStateList(context, R.color.dangerColor)
+                            ContextCompat.getColorStateList(context, R.color.safeColor)
                         isClickable = false
                     }
 
@@ -51,9 +50,9 @@ class ProductAdapter(
                     }
 
                     2 -> binding.warningIndicator.apply {
-                        setText(R.string.safe)
+                        setText(R.string.danger)
                         chipBackgroundColor =
-                            ContextCompat.getColorStateList(context, R.color.safeColor)
+                            ContextCompat.getColorStateList(context, R.color.dangerColor)
                         isClickable = false
                     }
 
@@ -83,9 +82,19 @@ class ProductAdapter(
         }
         val ivFavorite = holder.binding.ivFavorite
         if (products.isFavorite) {
-            ivFavorite.setImageDrawable(ContextCompat.getDrawable(ivFavorite.context, R.drawable.round_favorite_24))
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_24
+                )
+            )
         } else {
-            ivFavorite.setImageDrawable(ContextCompat.getDrawable(ivFavorite.context, R.drawable.round_favorite_border_24))
+            ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    ivFavorite.context,
+                    R.drawable.round_favorite_border_24
+                )
+            )
         }
         ivFavorite.setOnClickListener {
             products.isFavorite = !products.isFavorite

@@ -10,6 +10,12 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
 
     val getUserHealthCondition = repository.getUserHealthCondition()
 
+    fun deleteAllData() {
+        viewModelScope.launch {
+            repository.deleteAllData()
+        }
+    }
+
     fun saveAuthToken(token: String) {
         viewModelScope.launch {
             repository.saveAuthToken(token)

@@ -3,32 +3,30 @@ package com.c23ps323.bitesense.ui.scannedProduct
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.c23ps323.bitesense.MainActivity
+import com.c23ps323.bitesense.R
 import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
-import com.c23ps323.bitesense.data.remote.response.DataItem
-import com.c23ps323.bitesense.data.remote.response.ProductResponse
+import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentScannedProductBinding
-import com.c23ps323.bitesense.entities.Product
-import com.c23ps323.bitesense.entities.ProductData
 import com.c23ps323.bitesense.ui.detail.DetailActivity
-import com.c23ps323.bitesense.ui.home.HomeViewModel
 import com.c23ps323.bitesense.utils.ViewModelFactory
+
 
 class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     private var _binding: FragmentScannedProductBinding? = null
     private val binding get() = _binding!!
-    private var list: ArrayList<Product> = arrayListOf()
-    private val scannedProductViewModel: HomeViewModel by viewModels {
+    private val scannedProductViewModel: ScannedProductViewModel by viewModels {
         ViewModelFactory.getInstance(requireContext())
     }
 
@@ -44,28 +42,47 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         showSystemUI()
+        onBackPressed()
+        scanProduct()
+    }
 
-        list.addAll(ProductData.favoriteListData)
+    private fun scanProduct() {
+        scannedProductViewModel.scannedProduct.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        setupRecyclerView(result.data)
+                    }
 
-//        scannedProductViewModel.getLastScannedProducts.observe(viewLifecycleOwner) { result ->
-//            if (result != null) {
-//                when(result) {
-//                    is Result.Loading -> showLoading(true)
-//                    is Result.Success -> {
-//                        showLoading(false)
-//                        setupRecyclerView(result.data)
-//                    }
-//                    is Result.Error -> {
-//                        showLoading(false)
-//                        Toast.makeText(
-//                            requireContext(),
-//                            result.error,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//            }
-//        }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            context,
+                            getString(R.string.fail_scan_product),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onBackPressed() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            callback
+        )
     }
 
     private fun showSystemUI() {
@@ -77,6 +94,22 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
+        }
+    }
+
+    private fun setupRecyclerView(products: List<ProductEntity>) {
+        val productAdapter = ProductAdapter(this) { product ->
+            if (product.isFavorite) {
+                scannedProductViewModel.saveProduct(product)
+            } else {
+                scannedProductViewModel.deleteProduct(product)
+            }
+        }
+        productAdapter.submitList(products)
+        binding.apply {
+            rvScannedProducts.adapter = productAdapter
+            rvScannedProducts.layoutManager = LinearLayoutManager(requireContext())
+            rvScannedProducts.setHasFixedSize(true)
         }
     }
 
@@ -103,15 +136,4 @@ class ScannedProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
             }
         }
     }
-
-//    @Suppress("UNCHECKED_CAST")
-//    private fun setupRecyclerView(product: ProductResponse) {
-//        binding.rvScannedProducts.adapter = ProductAdapter(this,
-//            product.data as List<DataItem>
-//        )
-//        binding.apply {
-//            rvScannedProducts.layoutManager = LinearLayoutManager(requireContext())
-//            rvScannedProducts.setHasFixedSize(true)
-//        }
-//    }
 }

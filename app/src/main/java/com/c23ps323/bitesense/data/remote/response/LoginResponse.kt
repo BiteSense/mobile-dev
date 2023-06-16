@@ -1,7 +1,4 @@
-package com.c23ps323.bitesense.data.remote.response
-
 import com.google.gson.annotations.SerializedName
-import retrofit2.http.Headers
 
 data class LoginResponse(
 
@@ -23,7 +20,6 @@ data class LoginResponse(
 )
 
 data class LoginData(
-
     @field:SerializedName("token")
     val token: String? = null
 )

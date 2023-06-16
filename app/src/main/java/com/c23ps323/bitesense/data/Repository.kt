@@ -1,27 +1,24 @@
 package com.c23ps323.bitesense.data
 
-import android.util.Log
+import LoginResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.c23ps323.bitesense.data.local.AuthPreferencesDataSource
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.data.local.room.ProductDao
-
-import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.remote.response.*
 import com.c23ps323.bitesense.data.remote.retrofit.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-
 import com.c23ps323.bitesense.data.remote.response.EditProfileResponse
 import com.c23ps323.bitesense.data.remote.response.HealthConditionResponse
-import com.c23ps323.bitesense.data.remote.response.ProductResponse
 import com.c23ps323.bitesense.data.remote.response.UploadProductResponse
 import com.c23ps323.bitesense.data.remote.response.UserResponse
-
+import com.c23ps323.bitesense.utils.UserPreference
+import com.google.gson.JsonElement
 import okhttp3.MultipartBody
 import retrofit2.Response
 
@@ -29,8 +26,49 @@ import retrofit2.Response
 class Repository private constructor(
     private val apiService: ApiService,
     private val productDao: ProductDao,
-    private val preferencesDataSource: AuthPreferencesDataSource
+    private val preferencesDataSource: AuthPreferencesDataSource,
+    private val userPreference: UserPreference
 ) {
+    fun updatePreference(preference: JsonElement): LiveData<Result<UploadProductResponse>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val response = apiService.updatePreference(preference)
+                emit(Result.Success(response))
+            } catch (e: Exception) {
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun getScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getScannedProducts()
+            val products = response.data
+            val productList = products?.map {
+                val isFavorite = productDao.isFavoriteProduct(it?.namaProduk!!)
+                ProductEntity(
+                    it.idProduk.toString(),
+                    it.namaProduk,
+                    it.fotoProduk!!,
+                    it.tagProduk.toString(),
+                    it.deskripsiProduk.toString(),
+                    it.komposisiProduk.toString(),
+                    it.alert!!,
+                    isFavorite
+                )
+            }
+            productDao.deleteAll()
+            productDao.insertProducts(productList!!)
+            emit(Result.Success(productList))
+        } catch (e: Exception) {
+            emit(Result.Error(e.toString()))
+        }
+        val localData: LiveData<Result<List<ProductEntity>>> =
+            productDao.getScannedProducts().map { Result.Success(it) }
+        emitSource(localData)
+    }
+
     fun editTelepon(telepon: String): LiveData<Result<EditProfileResponse>> = liveData {
         emit(Result.Loading)
         try {
@@ -66,8 +104,13 @@ class Repository private constructor(
     ): LiveData<Result<UploadProductResponse>> = liveData {
         emit(Result.Loading)
         try {
+            val tempCookie = userPreference.getUserCookie()
             val response = apiService.uploadProduct(productImage)
-            emit(Result.Success(response))
+            val responseCookie: String = response.headers()["set-cookie"]!!
+            val newCookie = responseCookie.replace("\\s*Path=/\\s*".toRegex(), "")
+            userPreference.removeUserCookie()
+            userPreference.saveUserCookie("$tempCookie $newCookie")
+            emit(Result.Success(response.body()!!))
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
         }
@@ -93,52 +136,25 @@ class Repository private constructor(
         }
     }
 
-    fun getAllProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getAllProduct()
-            val products = response.data
-            val productList = products?.map {
-                val isFavorite = productDao.isFavoriteProduct(it?.namaProduk!!)
-                ProductEntity(
-                    it.idProduk.toString(),
-                    it.namaProduk,
-                    it.fotoProduk!!,
-                    it.tagProduk.toString(),
-                    it.deskripsiProduk.toString(),
-                    it.komposisiProduk.toString(),
-                    it.alert!!,
-                    isFavorite
-                )
-            }
-            productDao.deleteAll()
-            productDao.insertProducts(productList!!)
-        } catch (e: Exception) {
-            emit(Result.Error(e.toString()))
-        }
-        val localData: LiveData<Result<List<ProductEntity>>> = productDao.getProducts().map { Result.Success(it) }
-        emitSource(localData)
-    }
+    suspend fun deleteAllData() = productDao.deleteTable()
 
-    fun getFavoriteProducts(): LiveData<List<ProductEntity>> {
-        return productDao.getFavoriteProducts()
-    }
+    fun getFavoriteProducts(): LiveData<List<ProductEntity>> = productDao.getFavoriteProducts()
 
     suspend fun setFavoriteProduct(product: ProductEntity, favoriteState: Boolean) {
         product.isFavorite = favoriteState
         productDao.updateProduct(product)
     }
 
-    fun getLastScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
+    fun getAllProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.getProductLastScan()
+            val response = apiService.getAllProduct()
             val products = response.data
             val productList = products?.map {
-                val isFavorite = productDao.isFavoriteProduct(it?.namaProduk!!)
+                val isFavorite = productDao.isFavoriteProduct(it?.idProduk!!.toString())
                 ProductEntity(
                     it.idProduk.toString(),
-                    it.namaProduk,
+                    it.namaProduk!!,
                     it.fotoProduk!!,
                     it.tagProduk.toString(),
                     it.deskripsiProduk.toString(),
@@ -152,16 +168,43 @@ class Repository private constructor(
         } catch (e: Exception) {
             emit(Result.Error(e.toString()))
         }
-        val localData: LiveData<Result<List<ProductEntity>>> = productDao.getProducts().map { Result.Success(it) }
+        val localData: LiveData<Result<List<ProductEntity>>> =
+            productDao.getProducts().map { Result.Success(it) }
+        emitSource(localData)
+    }
+
+    fun getLastScannedProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getAllProduct()
+            val products = response.data
+            val productList = products?.map {
+                val isFavorite = productDao.isFavoriteProduct(it?.idProduk!!.toString())
+                ProductEntity(
+                    it.idProduk.toString(),
+                    it.namaProduk!!,
+                    it.fotoProduk!!,
+                    it.tagProduk.toString(),
+                    it.deskripsiProduk.toString(),
+                    it.komposisiProduk.toString(),
+                    it.alert!!,
+                    isFavorite
+                )
+            }
+            productDao.deleteAll()
+            productDao.insertProducts(productList!!)
+        } catch (e: Exception) {
+            emit(Result.Error(e.toString()))
+        }
+        val localData: LiveData<Result<List<ProductEntity>>> =
+            productDao.getLastProducts().map { Result.Success(it) }
         emitSource(localData)
     }
 
 
     suspend fun userLogin(email: String, password: String): Flow<kotlin.Result<Response<LoginResponse>>> = flow {
         try {
-
             val response = apiService.userLogin(email, password)
-            val header = response.headers().get("set-cookie")
             emit(kotlin.Result.success(response))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -228,10 +271,11 @@ class Repository private constructor(
         fun getInstance(
             apiService: ApiService,
             productDao: ProductDao,
-            preferencesDataSource: AuthPreferencesDataSource
+            preferencesDataSource: AuthPreferencesDataSource,
+            userPreference: UserPreference,
         ): Repository =
             instance ?: synchronized(this) {
-                instance ?: Repository(apiService, productDao,preferencesDataSource)
+                instance ?: Repository(apiService, productDao, preferencesDataSource, userPreference)
             }.also { instance = it }
     }
 }

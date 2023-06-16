@@ -1,9 +1,15 @@
 package com.c23ps323.bitesense.ui.editProfile
 
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
+import android.text.method.DigitsKeyListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -21,7 +27,6 @@ class EditProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private var title: String? = null
     private var profileValue: String? = null
-
     private val editProfileViewModel: EditProfileViewModel by viewModels {
         ViewModelFactory.getInstance(requireContext())
     }
@@ -49,6 +54,21 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setupUI() {
+        binding.etProfile.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s?.trim().isNullOrEmpty()) {
+                    btnEnable(true)
+                } else {
+                    btnEnable(false)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
+
         binding.apply {
             etProfile.setText(profileValue)
             tvTitle.text = getString(R.string.change_title, title)
@@ -56,26 +76,50 @@ class EditProfileFragment : Fragment() {
                 parentFragmentManager.popBackStack()
                 hideBottomNav(false)
             }
-            btnSubmit.setOnClickListener {
-                when (title) {
-                    "Username" -> {
-                        usernameEdit()
-                    }
-
-                    "Email" -> {
-                        emailEdit()
-                    }
-
-                    else -> {
-                        teleponEdit()
-                    }
+            if (title == getString(R.string.phone_number_text)) {
+                if (profileValue == null) {
+                    etProfile.setText("")
                 }
+                etProfile.inputType = InputType.TYPE_CLASS_NUMBER
+                etProfile.keyListener = DigitsKeyListener.getInstance("0123456789:")
+            }
+            btnSubmit.setOnClickListener {
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+                when (title) {
+                    USERNAME -> usernameEdit()
+                    EMAIL -> emailEdit()
+                    else -> teleponEdit()
+                }
+            }
+        }
+    }
+
+    private fun btnEnable(state: Boolean) {
+        if (state) {
+            binding.btnSubmit.apply {
+                isEnabled = true
+                alpha = 1f
+                setBackgroundResource(R.drawable.rounded_button)
+                text = getString(R.string.submit)
+            }
+        } else {
+            binding.btnSubmit.apply {
+                isEnabled = false
+                alpha = 0.6f
+                setBackgroundResource(R.drawable.rounded_button)
+                text = getString(R.string.fill_it)
             }
         }
     }
 
     private fun successEdit() {
         showLoading(false)
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.success_edit),
+            Toast.LENGTH_SHORT
+        ).show()
         val fragmentManager = requireActivity().supportFragmentManager
         for (i in 0 until fragmentManager.backStackEntryCount) {
             fragmentManager.popBackStack()
@@ -100,39 +144,39 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun teleponEdit() {
-        editProfileViewModel.editTelepon(binding.etProfile.text.toString())
+        editProfileViewModel.editTelepon(binding.etProfile.text.trim().toString())
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> showLoading(true)
                         is Result.Success -> successEdit()
-                        is Result.Error -> editFail(result.error)
+                        is Result.Error -> editFail(getString(R.string.general_error))
                     }
                 }
             }
     }
 
     private fun emailEdit() {
-        editProfileViewModel.editEmail(binding.etProfile.text.toString())
+        editProfileViewModel.editEmail(binding.etProfile.text.trim().toString())
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> showLoading(true)
                         is Result.Success -> successEdit()
-                        is Result.Error -> editFail(result.error)
+                        is Result.Error -> editFail(getString(R.string.general_error))
                     }
                 }
             }
     }
 
     private fun usernameEdit() {
-        editProfileViewModel.editUsername(binding.etProfile.text.toString())
+        editProfileViewModel.editUsername(binding.etProfile.text.trim().toString())
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> showLoading(true)
                         is Result.Success -> successEdit()
-                        is Result.Error -> editFail(result.error)
+                        is Result.Error -> editFail(getString(R.string.general_error))
                     }
                 }
             }
@@ -185,5 +229,7 @@ class EditProfileFragment : Fragment() {
     companion object {
         const val EXTRA_TITLE = "extra_title"
         const val EXTRA_VALUE = "extra_value"
+        private const val USERNAME = "Username"
+        private const val EMAIL = "Email"
     }
 }

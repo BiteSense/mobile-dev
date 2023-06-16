@@ -13,8 +13,6 @@ import com.c23ps323.bitesense.adapter.ProductAdapter
 import com.c23ps323.bitesense.data.Result
 import com.c23ps323.bitesense.data.local.entity.ProductEntity
 import com.c23ps323.bitesense.databinding.FragmentHistoryBinding
-import com.c23ps323.bitesense.entities.Product
-import com.c23ps323.bitesense.entities.ProductData
 import com.c23ps323.bitesense.ui.detail.DetailActivity
 import com.c23ps323.bitesense.utils.ViewModelFactory
 
@@ -44,7 +42,6 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
                         showLoading(false)
                         setupRecyclerView(result.data)
                     }
-
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
@@ -56,11 +53,6 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
                 }
             }
         }
-    }
-
-    override fun onItemClick(id: String) {
-        val intent = Intent(requireContext(), DetailActivity::class.java)
-        startActivity(intent)
     }
 
     private fun showLoading(show: Boolean) {
@@ -77,20 +69,26 @@ class HistoryFragment : Fragment(), ProductAdapter.OnItemClickListener {
         }
     }
 
+    override fun onItemClick(id: String) {
+        val intent = Intent(requireContext(), DetailActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun setupRecyclerView(products: List<ProductEntity>) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         val productAdapter = ProductAdapter(this) { product ->
             if (product.isFavorite) {
                 historyViewModel.saveProduct(product)
             } else {
                 historyViewModel.deleteProduct(product)
             }
-
         }
-        binding.rvHistoryItems.adapter = productAdapter
         productAdapter.submitList(products)
         binding.apply {
-            rvHistoryItems.layoutManager = LinearLayoutManager(requireContext())
+            rvHistoryItems.layoutManager = linearLayoutManager
             rvHistoryItems.setHasFixedSize(true)
+            rvHistoryItems.adapter = productAdapter
         }
     }
 }

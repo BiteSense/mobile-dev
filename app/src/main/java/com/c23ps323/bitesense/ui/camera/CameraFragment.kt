@@ -47,23 +47,25 @@ class CameraFragment : Fragment() {
     }
 
     private fun setupButton() {
-        binding.captureImage.setOnClickListener {
-            takePhoto()
-        }
-        binding.switchCamera.setOnClickListener {
-            cameraSelector =
-                if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
-            startCamera()
-        }
-        binding.btnFlash.setOnClickListener {
-            isFlashOn = !isFlashOn
-            startCamera()
-        }
-        binding.gallery.setOnClickListener {
-            startGallery()
-        }
-        binding.btnClose.setOnClickListener {
-            activity?.finish()
+        binding.apply {
+            captureImage.setOnClickListener {
+                takePhoto()
+            }
+            switchCamera.setOnClickListener {
+                cameraSelector =
+                    if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
+                startCamera()
+            }
+            btnFlash.setOnClickListener {
+                isFlashOn = !isFlashOn
+                startCamera()
+            }
+            gallery.setOnClickListener {
+                startGallery()
+            }
+            btnClose.setOnClickListener {
+                activity?.finish()
+            }
         }
     }
 
@@ -71,7 +73,7 @@ class CameraFragment : Fragment() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a Picture")
+        val chooser = Intent.createChooser(intent, TITLE)
         launcherIntentGallery.launch(chooser)
     }
 
@@ -104,9 +106,9 @@ class CameraFragment : Fragment() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val intent = Intent()
-                    intent.putExtra("picture", photoFile)
+                    intent.putExtra(PICTURE, photoFile)
                     intent.putExtra(
-                        "isBackCamera",
+                        ISBACKCAMERA,
                         cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
                     )
                     activity!!.setResult(200, intent)
@@ -117,7 +119,11 @@ class CameraFragment : Fragment() {
                     previewFragment.arguments = bundle
 
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.frame_camera, previewFragment, PreviewFragment::class.java.simpleName)
+                        .replace(
+                            R.id.frame_camera,
+                            previewFragment,
+                            PreviewFragment::class.java.simpleName
+                        )
                         .addToBackStack(null)
                         .commit()
                 }
@@ -167,8 +173,8 @@ class CameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
-        @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
@@ -188,5 +194,11 @@ class CameraFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val TITLE = "Choose a Picture"
+        private const val PICTURE = "picture"
+        private const val ISBACKCAMERA = "isBackCamera"
     }
 }

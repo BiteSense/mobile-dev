@@ -2,7 +2,7 @@ package com.c23ps323.bitesense.utils
 
 import android.content.Context
 
-internal class UserPreference(context: Context) {
+class UserPreference(context: Context) {
     private val preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val editor = preferences.edit()
 
